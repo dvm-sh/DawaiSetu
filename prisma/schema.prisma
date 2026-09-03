@@ -1,0 +1,547 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== ENUMS ====================
+
+enum UserRole {
+  ADMIN
+  DONOR
+  RECIPIENT
+}
+
+enum OrganizationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+}
+
+enum OrganizationType {
+  PHARMACY
+  HOSPITAL
+  NGO
+  CLINIC
+  HEALTH_ORGANIZATION
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MedicineStatus {
+  AVAILABLE
+  RESERVED
+  MATCHED
+  TRANSFER_PENDING
+  IN_TRANSIT
+  RECEIVED
+  DISTRIBUTED
+  EXPIRED
+  REJECTED
+  DISPOSED
+  PAUSED
+}
+
+enum ExpiryCategory {
+  HEALTHY
+  ATTENTION
+  HIGH_RISK
+  CRITICAL
+  EXPIRED
+}
+
+enum MedicineCategory {
+  ANTIBIOTIC
+  ANALGESIC
+  ANTIVIRAL
+  ANTIFUNGAL
+  CARDIOVASCULAR
+  RESPIRATORY
+  GASTROINTESTINAL
+  ENDOCRINE
+  NEUROLOGICAL
+  DERMATOLOGICAL
+  OPHTHALMIC
+  IMMUNOLOGICAL
+  ONCOLOGICAL
+  PSYCHIATRIC
+  VITAMIN_SUPPLEMENT
+  FIRST_AID
+  SURGICAL
+  DIAGNOSTIC
+  OTHER
+}
+
+enum DosageForm {
+  TABLET
+  CAPSULE
+  SYRUP
+  INJECTION
+  CREAM
+  OINTMENT
+  GEL
+  DROPS
+  INHALER
+  POWDER
+  SUSPENSION
+  SUPPOSITORY
+  PATCH
+  SPRAY
+  SOLUTION
+  OTHER
+}
+
+enum StorageRequirement {
+  ROOM_TEMPERATURE
+  REFRIGERATED
+  FROZEN
+  COOL_DRY_PLACE
+  PROTECT_FROM_LIGHT
+  OTHER
+}
+
+enum TransferStatus {
+  REQUESTED
+  APPROVED
+  AWAITING_CONFIRMATION
+  READY_FOR_PICKUP
+  IN_TRANSIT
+  DELIVERED
+  UNDER_INSPECTION
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum ShipmentMethod {
+  PICKUP
+  SHIPPING
+}
+
+enum RequirementUrgency {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum RequirementStatus {
+  ACTIVE
+  PARTIALLY_FULFILLED
+  FULFILLED
+  CANCELLED
+}
+
+enum NotificationType {
+  ORG_APPROVED
+  ORG_REJECTED
+  MEDICINE_REQUEST_RECEIVED
+  MEDICINE_REQUEST_ACCEPTED
+  MEDICINE_REQUEST_REJECTED
+  TRANSFER_CREATED
+  TRANSFER_STATUS_CHANGED
+  MEDICINE_EXPIRY_WARNING
+  MEDICINE_EXPIRED
+  INSPECTION_REQUIRED
+  TRANSFER_COMPLETED
+  MATCH_FOUND
+  LISTING_FLAGGED
+  GENERAL
+}
+
+enum FlagReason {
+  EXPIRED_MEDICINE
+  MISSING_BATCH_NUMBER
+  INVALID_ORGANIZATION
+  SUSPICIOUS_QUANTITY
+  RESTRICTED_CATEGORY
+  INVALID_DOCUMENTATION
+  SUSPICIOUS_LISTING
+  OTHER
+}
+
+// ==================== MODELS ====================
+
+model User {
+  id             String          @id @default(cuid())
+  email          String          @unique
+  passwordHash   String
+  role           UserRole
+  isActive       Boolean         @default(true)
+  emailVerified  Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  organization   Organization?
+  notifications  Notification[]
+  auditLogs      AuditLog[]      @relation("ActorLogs")
+  sessions       Session[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model Organization {
+  id                    String             @id @default(cuid())
+  userId                String             @unique
+  name                  String
+  type                  OrganizationType
+  role                  UserRole           // DONOR or RECIPIENT
+  status                OrganizationStatus @default(PENDING)
+  
+  address               String
+  city                  String
+  state                 String
+  country               String
+  pincode               String
+  latitude              Float?
+  longitude             Float?
+  
+  contactPerson         String
+  phone                 String
+  website               String?
+  registrationNumber    String
+  
+  rejectionReason       String?
+  
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  user                  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents             OrganizationDocument[]
+  medicines             Medicine[]
+  requirements          MedicineRequirement[]
+  donorTransfers        Transfer[]         @relation("DonorTransfers")
+  recipientTransfers    Transfer[]         @relation("RecipientTransfers")
+  donorMatches          Match[]            @relation("DonorMatches")
+  recipientMatches      Match[]            @relation("RecipientMatches")
+  feedbackGiven         Feedback[]
+
+  @@index([status])
+  @@index([role])
+  @@index([city])
+  @@index([type])
+}
+
+model OrganizationDocument {
+  id              String         @id @default(cuid())
+  organizationId  String
+  name            String
+  type            String         // e.g., "Drug License", "Registration Certificate"
+  fileUrl         String
+  fileName        String
+  fileSize        Int
+  status          DocumentStatus @default(PENDING)
+  rejectionReason String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([status])
+}
+
+model Medicine {
+  id                  String             @id @default(cuid())
+  organizationId      String
+  
+  name                String
+  genericName         String?
+  brandName           String?
+  category            MedicineCategory
+  strength            String?
+  dosageForm          DosageForm
+  
+  batchNumber         String?
+  manufacturer        String?
+  
+  quantity            Int
+  unit                String             @default("units")
+  originalQuantity    Int
+  
+  manufacturingDate   DateTime?
+  expiryDate          DateTime
+  daysRemaining       Int?
+  expiryCategory      ExpiryCategory?
+  
+  storageRequirement  StorageRequirement @default(ROOM_TEMPERATURE)
+  prescriptionRequired Boolean           @default(false)
+  
+  imageUrl            String?
+  barcode             String?
+  location            String?
+  notes               String?
+  
+  status              MedicineStatus     @default(AVAILABLE)
+  estimatedValue      Float?
+  
+  isPaused            Boolean            @default(false)
+  flagReason          FlagReason?
+  flagNote            String?
+  
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  transferItems       TransferItem[]
+  matches             Match[]
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([category])
+  @@index([expiryDate])
+  @@index([name])
+  @@index([genericName])
+  @@index([expiryCategory])
+}
+
+model MedicineRequirement {
+  id                  String             @id @default(cuid())
+  organizationId      String
+  
+  medicineName        String
+  genericName         String?
+  category            MedicineCategory?
+  dosageForm          DosageForm?
+  strength            String?
+  
+  quantityNeeded      Int
+  quantityFulfilled   Int                @default(0)
+  
+  urgency             RequirementUrgency @default(MEDIUM)
+  status              RequirementStatus  @default(ACTIVE)
+  
+  notes               String?
+  prescriptionRequired Boolean?
+  
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  matches             Match[]
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([medicineName])
+  @@index([category])
+}
+
+model Match {
+  id                  String             @id @default(cuid())
+  medicineId          String
+  requirementId       String?
+  donorOrgId          String
+  recipientOrgId      String
+  
+  matchScore          Float              // 0-100
+  scoreBreakdown      Json               // Detailed score breakdown
+  matchReasons        String[]           // Human-readable reasons
+  
+  isActive            Boolean            @default(true)
+  
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  medicine            Medicine           @relation(fields: [medicineId], references: [id], onDelete: Cascade)
+  requirement         MedicineRequirement? @relation(fields: [requirementId], references: [id], onDelete: SetNull)
+  donorOrg            Organization       @relation("DonorMatches", fields: [donorOrgId], references: [id], onDelete: Cascade)
+  recipientOrg        Organization       @relation("RecipientMatches", fields: [recipientOrgId], references: [id], onDelete: Cascade)
+  transfer            Transfer?
+
+  @@index([medicineId])
+  @@index([requirementId])
+  @@index([donorOrgId])
+  @@index([recipientOrgId])
+  @@index([matchScore])
+}
+
+model Transfer {
+  id                  String             @id @default(cuid())
+  matchId             String             @unique
+  donorOrgId          String
+  recipientOrgId      String
+  
+  status              TransferStatus     @default(REQUESTED)
+  
+  requestedAt         DateTime           @default(now())
+  approvedAt          DateTime?
+  confirmedAt         DateTime?
+  readyAt             DateTime?
+  inTransitAt         DateTime?
+  deliveredAt         DateTime?
+  inspectedAt         DateTime?
+  completedAt         DateTime?
+  cancelledAt         DateTime?
+  
+  cancellationReason  String?
+  
+  totalValue          Float?
+  
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  match               Match              @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  donorOrg            Organization       @relation("DonorTransfers", fields: [donorOrgId], references: [id])
+  recipientOrg        Organization       @relation("RecipientTransfers", fields: [recipientOrgId], references: [id])
+  items               TransferItem[]
+  shipment            Shipment?
+  inspection          Inspection?
+  feedback            Feedback?
+
+  @@index([status])
+  @@index([donorOrgId])
+  @@index([recipientOrgId])
+  @@index([createdAt])
+}
+
+model TransferItem {
+  id                  String             @id @default(cuid())
+  transferId          String
+  medicineId          String
+  quantity            Int
+  
+  createdAt           DateTime           @default(now())
+
+  transfer            Transfer           @relation(fields: [transferId], references: [id], onDelete: Cascade)
+  medicine            Medicine           @relation(fields: [medicineId], references: [id])
+
+  @@index([transferId])
+  @@index([medicineId])
+}
+
+model Shipment {
+  id                  String             @id @default(cuid())
+  transferId          String             @unique
+  
+  method              ShipmentMethod
+  carrier             String?
+  trackingNumber      String?
+  
+  pickupAddress       String
+  deliveryAddress     String
+  
+  pickupDate          DateTime?
+  expectedDelivery    DateTime?
+  actualDelivery      DateTime?
+  
+  notes               String?
+  
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  transfer            Transfer           @relation(fields: [transferId], references: [id], onDelete: Cascade)
+
+  @@index([transferId])
+  @@index([trackingNumber])
+}
+
+model Inspection {
+  id                  String             @id @default(cuid())
+  transferId          String             @unique
+  
+  packagingCondition  String?
+  temperatureOk       Boolean?
+  quantityVerified    Boolean?
+  expiryVerified      Boolean?
+  
+  isAccepted          Boolean
+  rejectionReason     String?
+  notes               String?
+  
+  inspectedAt         DateTime           @default(now())
+  
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  transfer            Transfer           @relation(fields: [transferId], references: [id], onDelete: Cascade)
+
+  @@index([transferId])
+}
+
+model Notification {
+  id                  String             @id @default(cuid())
+  userId              String
+  
+  type                NotificationType
+  title               String
+  message             String
+  
+  isRead              Boolean            @default(false)
+  
+  entityType          String?
+  entityId            String?
+  actionUrl           String?
+  
+  createdAt           DateTime           @default(now())
+
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model Feedback {
+  id                  String             @id @default(cuid())
+  transferId          String             @unique
+  organizationId      String
+  
+  rating              Int                // 1-5
+  deliveryExperience  Int?               // 1-5
+  medicineCondition   Int?               // 1-5
+  comments            String?
+  
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  transfer            Transfer           @relation(fields: [transferId], references: [id], onDelete: Cascade)
+  organization        Organization       @relation(fields: [organizationId], references: [id])
+
+  @@index([transferId])
+  @@index([organizationId])
+}
+
+model AuditLog {
+  id                  String             @id @default(cuid())
+  actorId             String?
+  
+  action              String
+  entityType          String
+  entityId            String?
+  
+  metadata            Json?
+  ipAddress           String?
+  
+  createdAt           DateTime           @default(now())
+
+  actor               User?              @relation("ActorLogs", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([entityType])
+  @@index([action])
+  @@index([createdAt])
+}
