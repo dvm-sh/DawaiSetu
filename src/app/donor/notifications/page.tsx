@@ -46,8 +46,8 @@ export default function NotificationsPage() {
       ) : (
         <div className="space-y-2">
           {notifications.map(n => (
-            <Card key={n.id as string} className={`p-4 cursor-pointer transition-colors ${!(n.isRead as boolean) ? 'bg-teal-50/50 border-teal-200' : 'hover:bg-gray-50'}`}
-              onClick={() => { if (!(n.isRead as boolean)) markRead(n.id as string) }}>
+            <div key={n.id as string} onClick={() => { if (!(n.isRead as boolean)) markRead(n.id as string) }}>
+              <Card className={`p-4 cursor-pointer transition-colors ${!(n.isRead as boolean) ? 'bg-teal-50/50 border-teal-200' : 'hover:bg-gray-50'}`}>
               <div className="flex items-start gap-3">
                 <div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${!(n.isRead as boolean) ? 'bg-teal-500' : 'bg-transparent'}`} />
                 <div className="flex-1 min-w-0">
@@ -55,9 +55,10 @@ export default function NotificationsPage() {
                   <p className="text-sm text-gray-600 mt-0.5">{n.message as string}</p>
                   <p className="text-xs text-gray-400 mt-1">{formatDateTime(n.createdAt as string)}</p>
                 </div>
-                {n.actionUrl && <Link href={n.actionUrl as string}><Button size="sm" variant="ghost">View</Button></Link>}
+                {!!n.actionUrl && <Link href={n.actionUrl as string}><Button size="sm" variant="ghost">View</Button></Link>}
               </div>
-            </Card>
+              </Card>
+            </div>
           ))}
         </div>
       )}

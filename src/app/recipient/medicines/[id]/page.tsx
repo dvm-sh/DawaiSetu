@@ -95,7 +95,7 @@ export default function RecipientMedicineDetailPage() {
               </div>
               <div className="flex justify-between text-sm"><dt className="text-gray-500">Storage</dt><dd className="font-medium">{formatStatus(medicine.storageRequirement as string || '')}</dd></div>
               <div className="flex justify-between text-sm"><dt className="text-gray-500">Rx Required</dt><dd className="font-medium">{medicine.prescriptionRequired ? 'Yes' : 'No'}</dd></div>
-              {medicine.estimatedValue && <div className="flex justify-between text-sm"><dt className="text-gray-500">Est. Value</dt><dd className="font-medium">₹{medicine.estimatedValue as number}</dd></div>}
+              {!!medicine.estimatedValue && <div className="flex justify-between text-sm"><dt className="text-gray-500">Est. Value</dt><dd className="font-medium">₹{medicine.estimatedValue as number}</dd></div>}
             </dl>
           </CardContent>
         </Card>

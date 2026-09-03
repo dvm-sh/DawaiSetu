@@ -2,7 +2,10 @@ import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import { prisma } from './db'
 import bcrypt from 'bcryptjs'
-import { UserRole } from '@prisma/client'
+import { $Enums } from '@prisma/client'
+
+export type UserRole = $Enums.UserRole
+export const UserRole = $Enums.UserRole
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback-secret-change-me')
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'

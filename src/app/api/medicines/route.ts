@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
 
     // Run matching engine asynchronously
     try {
-      await runMatchingForMedicine(medicine)
+      await runMatchingForMedicine(medicine.id)
     } catch (e) {
       console.error('Matching engine error:', e)
     }

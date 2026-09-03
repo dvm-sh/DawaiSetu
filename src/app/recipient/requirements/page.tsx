@@ -41,8 +41,8 @@ export default function RecipientRequirementsPage() {
                       </span>
                     </div>
                     <p className="text-sm text-gray-500">
-                      {req.genericName && `${req.genericName} · `}{req.category && `${(req.category as string).replace(/_/g, ' ')} · `}
-                      Qty: {req.quantityNeeded as number}{req.dosageForm && ` · ${req.dosageForm}`}
+                      {!!req.genericName && `${req.genericName} · `}{!!req.category && `${(req.category as string).replace(/_/g, ' ')} · `}
+                      Qty: {req.quantityNeeded as number}{!!req.dosageForm && ` · ${req.dosageForm}`}
                     </p>
                     <p className="text-xs text-gray-400 mt-1">Created {formatDate(req.createdAt as string)}</p>
                     {matches.length > 0 && (

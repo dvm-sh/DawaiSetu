@@ -148,7 +148,7 @@ export default function TransferDetailPage() {
           {(isCancelled || isRejected) ? (
             <div className="p-4 bg-red-50 rounded-xl border border-red-200">
               <p className="font-semibold text-red-700">{isCancelled ? 'Transfer Cancelled' : 'Transfer Rejected'}</p>
-              {transfer.cancellationReason && <p className="text-sm text-red-600 mt-1">Reason: {transfer.cancellationReason as string}</p>}
+              {!!transfer.cancellationReason && <p className="text-sm text-red-600 mt-1">Reason: {transfer.cancellationReason as string}</p>}
             </div>
           ) : (
             <div className="relative">
@@ -167,11 +167,11 @@ export default function TransferDetailPage() {
                       <p className={`text-sm font-semibold ${isCurrent ? 'text-teal-700' : ''}`}>{step.label}</p>
                       {isComplete && (
                         <p className="text-xs text-gray-500 mt-0.5">
-                          {step.status === 'REQUESTED' && transfer.requestedAt && formatDateTime(transfer.requestedAt as string)}
-                          {step.status === 'APPROVED' && transfer.approvedAt && formatDateTime(transfer.approvedAt as string)}
-                          {step.status === 'IN_TRANSIT' && transfer.inTransitAt && formatDateTime(transfer.inTransitAt as string)}
-                          {step.status === 'DELIVERED' && transfer.deliveredAt && formatDateTime(transfer.deliveredAt as string)}
-                          {step.status === 'COMPLETED' && transfer.completedAt && formatDateTime(transfer.completedAt as string)}
+                          {step.status === 'REQUESTED' && !!transfer.requestedAt && formatDateTime(transfer.requestedAt as string)}
+                          {step.status === 'APPROVED' && !!transfer.approvedAt && formatDateTime(transfer.approvedAt as string)}
+                          {step.status === 'IN_TRANSIT' && !!transfer.inTransitAt && formatDateTime(transfer.inTransitAt as string)}
+                          {step.status === 'DELIVERED' && !!transfer.deliveredAt && formatDateTime(transfer.deliveredAt as string)}
+                          {step.status === 'COMPLETED' && !!transfer.completedAt && formatDateTime(transfer.completedAt as string)}
                         </p>
                       )}
                     </div>
@@ -267,7 +267,7 @@ export default function TransferDetailPage() {
       </Card>
 
       {/* Shipment Info */}
-      {transfer.shipment && (
+      {!!transfer.shipment && (
         <Card>
           <CardHeader><CardTitle>Shipment Details</CardTitle></CardHeader>
           <CardContent>
@@ -287,7 +287,7 @@ export default function TransferDetailPage() {
       )}
 
       {/* Inspection */}
-      {transfer.inspection && (
+      {!!transfer.inspection && (
         <Card>
           <CardHeader><CardTitle>Inspection Result</CardTitle></CardHeader>
           <CardContent>
@@ -301,7 +301,7 @@ export default function TransferDetailPage() {
       )}
 
       {/* Feedback */}
-      {transfer.feedback && (
+      {!!transfer.feedback && (
         <Card>
           <CardHeader><CardTitle>Feedback</CardTitle></CardHeader>
           <CardContent>

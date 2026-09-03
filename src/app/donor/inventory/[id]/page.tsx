@@ -77,7 +77,7 @@ export default function MedicineDetailPage() {
                 <dt className="text-gray-500">Original Quantity</dt>
                 <dd className="font-medium">{medicine.originalQuantity as number} {medicine.unit as string}</dd>
               </div>
-              {medicine.manufacturingDate && <div className="flex justify-between text-sm">
+              {!!medicine.manufacturingDate && <div className="flex justify-between text-sm">
                 <dt className="text-gray-500">Mfg Date</dt>
                 <dd className="font-medium">{formatDate(medicine.manufacturingDate as string)}</dd>
               </div>}
@@ -101,7 +101,7 @@ export default function MedicineDetailPage() {
                 <dt className="text-gray-500">Prescription Req.</dt>
                 <dd className="font-medium">{medicine.prescriptionRequired ? 'Yes' : 'No'}</dd>
               </div>
-              {medicine.estimatedValue && <div className="flex justify-between text-sm">
+              {!!medicine.estimatedValue && <div className="flex justify-between text-sm">
                 <dt className="text-gray-500">Est. Value</dt>
                 <dd className="font-medium">₹{medicine.estimatedValue as number}</dd>
               </div>}
@@ -110,14 +110,14 @@ export default function MedicineDetailPage() {
         </Card>
       </div>
 
-      {medicine.location && (
+      {!!medicine.location && (
         <Card>
           <CardHeader><CardTitle className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Location</CardTitle></CardHeader>
           <CardContent><p className="text-sm text-gray-700">{medicine.location as string}</p></CardContent>
         </Card>
       )}
 
-      {medicine.notes && (
+      {!!medicine.notes && (
         <Card>
           <CardHeader><CardTitle>Notes</CardTitle></CardHeader>
           <CardContent><p className="text-sm text-gray-700">{medicine.notes as string}</p></CardContent>

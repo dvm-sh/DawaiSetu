@@ -1,4 +1,5 @@
 import { prisma } from './db'
+import { Prisma } from '@prisma/client'
 
 export async function createAuditLog({
   actorId,
@@ -12,7 +13,7 @@ export async function createAuditLog({
   action: string
   entityType: string
   entityId?: string
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any> | null
   ipAddress?: string
 }) {
   try {
@@ -22,7 +23,7 @@ export async function createAuditLog({
         action,
         entityType,
         entityId,
-        metadata: metadata || {},
+        metadata: metadata ?? Prisma.NullableJsonNullValueInput.DbNull,
         ipAddress,
       },
     })
