@@ -37,6 +37,15 @@ export async function handleApiError(error: unknown) {
     if (error.message === 'ORGANIZATION_NOT_APPROVED') {
       return forbiddenResponse('Your organization is not approved yet')
     }
+    if ('code' in error && (error as { code: string }).code === 'P1001') {
+      return serverErrorResponse('Cannot connect to database server. Please verify PostgreSQL is running.')
+    }
+    if (error.name === 'PrismaClientInitializationError') {
+      if (error.message.includes("Can't reach database server")) {
+        return serverErrorResponse('Database server unreachable. Please verify PostgreSQL is running and accessible.')
+      }
+      return serverErrorResponse('Database initialization error. Please verify your DATABASE_URL.')
+    }
   }
   
   return serverErrorResponse()

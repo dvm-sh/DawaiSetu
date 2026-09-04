@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:push": "npx prisma db push",
+    "db:seed": "npx tsx prisma/seed.ts",
+    "db:reset": "npx prisma db push --force-reset && npx tsx prisma/seed.ts",
+    "prisma:studio": "npx prisma studio"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -45,6 +52,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }
