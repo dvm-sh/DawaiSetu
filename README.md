@@ -83,6 +83,10 @@ We welcome contributions! A huge thanks to the following people who have contrib
 | **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | UI/UX & Frontend |
 | **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | Backend & Database |
 
+<a href="https://github.com/dvm-sh/DawaiSetu/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dvm-sh/DawaiSetu" />
+</a>
+
 *(Want to be on this list? Check out our [Contributing Guidelines](CONTRIBUTING.md) and submit a pull request!)*
 
 ---
