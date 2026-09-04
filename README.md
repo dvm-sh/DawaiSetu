@@ -79,9 +79,9 @@ We welcome contributions! A huge thanks to the following people who have contrib
 
 | Contributor | GitHub Profile | Role / Contribution |
 | :--- | :--- | :--- |
-| **Your Name** | [@dvm-sh](https://github.com/dvm-sh) | Project Lead / Developer |
-| **Add Contributor** | [@ArthurNoob69](https://github.com/ArthurNoob69) | UI/UX & Frontend |
-| **Add Contributor** | [@ArthurNoob69](https://github.com/ArthurNoob69) | Backend & Database |
+| **Devansh Mishra** | [@dvm-sh](https://github.com/dvm-sh) | Project Lead / Developer |
+| **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | UI/UX & Frontend |
+| **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | Backend & Database |
 
 *(Want to be on this list? Check out our [Contributing Guidelines](CONTRIBUTING.md) and submit a pull request!)*
 
