@@ -18,6 +18,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [agreedToTos, setAgreedToTos] = useState(false)
   const { register } = useAuth()
   const { addToast } = useToast()
   const router = useRouter()
@@ -25,6 +26,8 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     organizationName: '', organizationType: '', address: '', city: '', state: '', country: 'India', pincode: '',
     contactPerson: '', phone: '', email: '', password: '', confirmPassword: '', website: '', registrationNumber: '',
+    // Document names
+    drugLicense: '', orgRegistration: '', authRepDetails: '', requiredAgreement: '', otherDocs: ''
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -42,6 +45,10 @@ export default function RegisterPage() {
     if (!formData.city) e.city = 'Required'
     if (!formData.state) e.state = 'Required'
     if (!formData.pincode) e.pincode = 'Required'
+    if (!formData.drugLicense) e.drugLicense = 'Required'
+    if (!formData.orgRegistration) e.orgRegistration = 'Required'
+    if (!formData.authRepDetails) e.authRepDetails = 'Required'
+    if (!formData.requiredAgreement) e.requiredAgreement = 'Required'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -53,6 +60,7 @@ export default function RegisterPage() {
     if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) e.email = 'Valid email required'
     if (!formData.password || formData.password.length < 8) e.password = 'Min 8 characters'
     if (formData.password !== formData.confirmPassword) e.confirmPassword = 'Passwords do not match'
+    if (!agreedToTos) e.tos = 'You must agree to the Terms of Service'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -169,7 +177,40 @@ export default function RegisterPage() {
                   <Input label="PIN / ZIP Code" value={formData.pincode} onChange={e => updateField('pincode', e.target.value)} error={errors.pincode} required />
                 </div>
                 <Input label="Website (optional)" value={formData.website} onChange={e => updateField('website', e.target.value)} placeholder="https://" />
-                <div className="flex gap-3 pt-2">
+                
+                <div className="pt-4 border-t border-gray-100 mt-4">
+                  <h3 className="font-semibold text-gray-900 mb-4">Verification Documents</h3>
+                  <p className="text-sm text-gray-500 mb-4">Please upload the required verification documents (PDF, JPG, PNG). *Simulated for demo*</p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Drug License *</label>
+                      <input type="file" onChange={(e) => updateField('drugLicense', e.target.files?.[0]?.name || '')} className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" />
+                      {errors.drugLicense && <p className="text-xs text-red-500 mt-1">{errors.drugLicense}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Organization Registration *</label>
+                      <input type="file" onChange={(e) => updateField('orgRegistration', e.target.files?.[0]?.name || '')} className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" />
+                      {errors.orgRegistration && <p className="text-xs text-red-500 mt-1">{errors.orgRegistration}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Authorized Representative Details *</label>
+                      <input type="file" onChange={(e) => updateField('authRepDetails', e.target.files?.[0]?.name || '')} className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" />
+                      {errors.authRepDetails && <p className="text-xs text-red-500 mt-1">{errors.authRepDetails}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Required Agreement *</label>
+                      <input type="file" onChange={(e) => updateField('requiredAgreement', e.target.files?.[0]?.name || '')} className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" />
+                      {errors.requiredAgreement && <p className="text-xs text-red-500 mt-1">{errors.requiredAgreement}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Other Verification Documents (Optional)</label>
+                      <input type="file" onChange={(e) => updateField('otherDocs', e.target.files?.[0]?.name || '')} className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-4">
                   <Button variant="outline" onClick={() => setStep(1)} className="flex-1">Back</Button>
                   <Button onClick={() => validateStep2() && setStep(3)} className="flex-1">Continue</Button>
                 </div>
@@ -184,6 +225,28 @@ export default function RegisterPage() {
                 <Input label="Email" type="email" value={formData.email} onChange={e => updateField('email', e.target.value)} error={errors.email} required />
                 <Input label="Password" type="password" value={formData.password} onChange={e => updateField('password', e.target.value)} error={errors.password} hint="Minimum 8 characters" required />
                 <Input label="Confirm Password" type="password" value={formData.confirmPassword} onChange={e => updateField('confirmPassword', e.target.value)} error={errors.confirmPassword} required />
+                
+                <div className="flex items-start gap-3 py-2">
+                  <div className="flex items-center h-5 mt-1">
+                    <input
+                      id="tos"
+                      type="checkbox"
+                      checked={agreedToTos}
+                      onChange={(e) => {
+                        setAgreedToTos(e.target.checked)
+                        if (errors.tos && e.target.checked) {
+                          setErrors(prev => { const n = { ...prev }; delete n.tos; return n })
+                        }
+                      }}
+                      className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                    />
+                  </div>
+                  <label htmlFor="tos" className="text-sm text-gray-600 leading-relaxed">
+                    I have read and agree to the <Link href="/terms" target="_blank" className="text-teal-600 hover:underline">Terms of Service</Link>, including my responsibilities regarding medicine quality and proper distribution.
+                  </label>
+                </div>
+                {errors.tos && <p className="text-sm text-red-500 font-medium">{errors.tos}</p>}
+
                 <div className="flex gap-3 pt-2">
                   <Button variant="outline" onClick={() => setStep(2)} className="flex-1">Back</Button>
                   <Button onClick={handleSubmit} isLoading={isLoading} className="flex-1">Register</Button>

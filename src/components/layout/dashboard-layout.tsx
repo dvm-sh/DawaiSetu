@@ -10,6 +10,7 @@ import {
   Bell, User, Settings, Building2, Users, ClipboardList, LogOut,
   Menu, X, Search, Pill, FileText, Heart, ChevronDown, MessageSquare, ShieldCheck
 } from 'lucide-react'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 const DONOR_NAV = [
   { href: '/donor', label: 'Dashboard', icon: LayoutDashboard },
@@ -178,6 +179,7 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link href={`/${requiredRole.toLowerCase()}/notifications`} className="relative p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (

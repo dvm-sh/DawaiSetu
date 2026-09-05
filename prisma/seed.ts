@@ -18,7 +18,7 @@ async function main() {
   await prisma.notification.deleteMany()
   await prisma.auditLog.deleteMany()
   await prisma.session.deleteMany()
-  await prisma.document.deleteMany()
+  await prisma.organizationDocument.deleteMany()
   await prisma.organization.deleteMany()
   await prisma.user.deleteMany()
 
@@ -388,6 +388,7 @@ async function main() {
       recipientOrgId: recipientUser.organization!.id,
       requirementId: req1.id,
       matchScore: 92.5,
+      scoreBreakdown: { category: 20, location: 30, urgency: 42.5 },
       matchReasons: ['Same category', 'Same city', 'High urgency requirement', 'Good expiry date'],
       isActive: true,
     },
@@ -400,6 +401,7 @@ async function main() {
       recipientOrgId: recipientUser.organization!.id,
       requirementId: req2.id,
       matchScore: 85.0,
+      scoreBreakdown: { generic: 30, location: 30, urgency: 25 },
       matchReasons: ['Exact generic match', 'Same city', 'Medium urgency'],
       isActive: true,
     },
@@ -412,6 +414,7 @@ async function main() {
       donorOrgId: donorUser.organization!.id,
       recipientOrgId: recipientUser2.organization!.id,
       matchScore: 72.0,
+      scoreBreakdown: { category: 20, state: 20, quantity: 32 },
       matchReasons: ['Category match', 'Same state', 'Good quantity'],
       isActive: true,
     },
@@ -423,6 +426,7 @@ async function main() {
       donorOrgId: donorUser.organization!.id,
       recipientOrgId: recipientUser2.organization!.id,
       matchScore: 68.0,
+      scoreBreakdown: { category: 20, state: 20, quantity: 28 },
       matchReasons: ['Endocrine category', 'Same state'],
       isActive: true,
     },

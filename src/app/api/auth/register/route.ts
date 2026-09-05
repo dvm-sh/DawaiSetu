@@ -7,7 +7,11 @@ import { createAuditLog } from '@/lib/audit'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, password, confirmPassword, role, organizationName, organizationType, address, city, state, country, pincode, contactPerson, phone, registrationNumber, website } = body
+    const { 
+      email, password, confirmPassword, role, organizationName, organizationType, 
+      address, city, state, country, pincode, contactPerson, phone, registrationNumber, website,
+      drugLicense, orgRegistration, authRepDetails, requiredAgreement, otherDocs
+    } = body
 
     // Validation
     const errors: Record<string, string> = {}
@@ -63,6 +67,20 @@ export async function POST(request: NextRequest) {
       },
       include: { organization: true },
     })
+    
+    // Create documents
+    const orgId = user.organization!.id
+    const docsToCreate = []
+    
+    if (drugLicense) docsToCreate.push({ organizationId: orgId, name: drugLicense, type: 'Drug License', fileUrl: 'simulated://' + drugLicense, fileName: drugLicense, fileSize: 1024 })
+    if (orgRegistration) docsToCreate.push({ organizationId: orgId, name: orgRegistration, type: 'Organization Registration', fileUrl: 'simulated://' + orgRegistration, fileName: orgRegistration, fileSize: 1024 })
+    if (authRepDetails) docsToCreate.push({ organizationId: orgId, name: authRepDetails, type: 'Authorized Rep Details', fileUrl: 'simulated://' + authRepDetails, fileName: authRepDetails, fileSize: 1024 })
+    if (requiredAgreement) docsToCreate.push({ organizationId: orgId, name: requiredAgreement, type: 'Required Agreement', fileUrl: 'simulated://' + requiredAgreement, fileName: requiredAgreement, fileSize: 1024 })
+    if (otherDocs) docsToCreate.push({ organizationId: orgId, name: otherDocs, type: 'Other', fileUrl: 'simulated://' + otherDocs, fileName: otherDocs, fileSize: 1024 })
+
+    if (docsToCreate.length > 0) {
+      await prisma.organizationDocument.createMany({ data: docsToCreate })
+    }
 
     await createAuditLog({
       actorId: user.id,

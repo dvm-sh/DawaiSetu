@@ -1,58 +1,31 @@
-'use client'
-
 import Link from 'next/link'
 import { Heart, ArrowRight, Shield, Truck, Users, BarChart3, CheckCircle2, Pill, Building2, Recycle, Search, ChevronRight, Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { cookies } from 'next/headers'
+import { jwtVerify } from 'jose'
+import { ClientNav } from '@/components/client-nav'
 
-export default function HomePage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback-secret-change-me')
 
+async function getUserFromCookie() {
+  try {
+    const cookieStore = cookies()
+    const token = cookieStore.get('auth-token')?.value
+    if (!token) return null
+    const { payload } = await jwtVerify(token, JWT_SECRET)
+    return payload
+  } catch {
+    return null
+  }
+}
+
+export default async function HomePage() {
+  const user = await getUserFromCookie()
+  
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
-                <Recycle className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">DawaiSetu</span>
-            </Link>
-            
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/about" className="text-sm text-gray-600 hover:text-teal-600 transition-colors">About</Link>
-              <Link href="/how-it-works" className="text-sm text-gray-600 hover:text-teal-600 transition-colors">How It Works</Link>
-              <Link href="/contact" className="text-sm text-gray-600 hover:text-teal-600 transition-colors">Contact</Link>
-            </div>
+      <ClientNav initialUser={user} />
 
-            <div className="hidden md:flex items-center gap-3">
-              <Link href="/login" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-teal-600 transition-colors">
-                Sign In
-              </Link>
-              <Link href="/register" className="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors shadow-sm">
-                Get Started
-              </Link>
-            </div>
-
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 text-gray-600">
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 px-4 pb-4 pt-2 space-y-2">
-            <Link href="/about" className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">About</Link>
-            <Link href="/how-it-works" className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">How It Works</Link>
-            <Link href="/contact" className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">Contact</Link>
-            <hr className="my-2" />
-            <Link href="/login" className="block px-3 py-2 text-sm text-gray-700 font-medium hover:bg-gray-50 rounded-lg">Sign In</Link>
-            <Link href="/register" className="block px-3 py-2 text-sm text-white bg-teal-600 rounded-lg text-center font-medium">Get Started</Link>
-          </div>
-        )}
-      </nav>
 
       {/* Hero */}
       <section className="pt-24 pb-16 sm:pt-32 sm:pb-24 px-4">
@@ -260,14 +233,14 @@ export default function HomePage() {
               <div className="space-y-2 text-sm">
                 <Link href="/contact" className="block hover:text-white transition-colors">Contact</Link>
                 <Link href="/contact" className="block hover:text-white transition-colors">Help Center</Link>
-                <Link href="/contact" className="block hover:text-white transition-colors">FAQ</Link>
+                <Link href="/faq" className="block hover:text-white transition-colors">FAQ</Link>
               </div>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Legal</h4>
               <div className="space-y-2 text-sm">
-                <Link href="/contact" className="block hover:text-white transition-colors">Privacy Policy</Link>
-                <Link href="/contact" className="block hover:text-white transition-colors">Terms of Service</Link>
+                <Link href="/privacy" className="block hover:text-white transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="block hover:text-white transition-colors">Terms of Service</Link>
               </div>
             </div>
           </div>
