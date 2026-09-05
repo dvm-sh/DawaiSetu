@@ -13,12 +13,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'default', size = 'default', isLoading, children, disabled, ...props }, ref) => {
     const variants = {
-      default: 'bg-teal-600 text-white hover:bg-teal-700 shadow-sm',
-      destructive: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
-      outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
-      secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-      ghost: 'text-gray-700 hover:bg-gray-100',
-      link: 'text-teal-600 underline-offset-4 hover:underline',
+      default: 'bg-teal-600 text-white hover:bg-teal-700 shadow-sm dark:bg-teal-600 dark:hover:bg-teal-500',
+      destructive: 'bg-red-600 text-white hover:bg-red-700 shadow-sm dark:bg-red-600 dark:hover:bg-red-500',
+      outline: 'border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm',
+      secondary: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700',
+      ghost: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
+      link: 'text-teal-600 dark:text-teal-400 underline-offset-4 hover:underline',
     }
 
     const sizes = {
@@ -31,7 +31,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors',
+          'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors cursor-pointer',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2',
           'disabled:pointer-events-none disabled:opacity-50',
           variants[variant],

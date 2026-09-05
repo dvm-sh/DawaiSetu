@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('animate-pulse rounded-lg bg-gray-200', className)}
+      className={cn('animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700', className)}
       {...props}
     />
   )
@@ -32,7 +32,7 @@ export function TableSkeleton({ rows = 5, cols = 4 }: { rows?: number; cols?: nu
 
 export function CardSkeleton() {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 space-y-4">
       <div className="flex justify-between items-start">
         <div className="space-y-2">
           <Skeleton className="h-4 w-24" />
@@ -52,7 +52,7 @@ export function DashboardSkeleton() {
           <CardSkeleton key={i} />
         ))}
       </div>
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
         <Skeleton className="h-6 w-40 mb-4" />
         <TableSkeleton />
       </div>

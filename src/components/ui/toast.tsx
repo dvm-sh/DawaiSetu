@@ -70,7 +70,7 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
   return (
     <div
       className={cn(
-        'bg-white rounded-lg shadow-lg border border-gray-200 border-l-4 p-4',
+        'bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 border-l-4 p-4',
         'animate-in slide-in-from-right-full duration-300',
         borders[toast.type]
       )}
@@ -79,10 +79,10 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
       <div className="flex items-start gap-3">
         {icons[toast.type]}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-900">{toast.title}</p>
-          {toast.message && <p className="text-sm text-gray-500 mt-0.5">{toast.message}</p>}
+          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{toast.title}</p>
+          {toast.message && <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{toast.message}</p>}
         </div>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 shrink-0">
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shrink-0 cursor-pointer">
           <X className="h-4 w-4" />
         </button>
       </div>

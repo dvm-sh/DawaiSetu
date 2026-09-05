@@ -42,14 +42,14 @@ export function Modal({ isOpen, onClose, title, description, children, className
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className={cn('relative bg-white rounded-2xl shadow-xl w-full max-h-[90vh] overflow-y-auto', sizes[size], className)}>
+      <div className={cn('relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-h-[90vh] overflow-y-auto', sizes[size], className)}>
         {(title || description) && (
-          <div className="flex items-start justify-between p-6 border-b border-gray-100">
+          <div className="flex items-start justify-between p-6 border-b border-gray-100 dark:border-gray-700">
             <div>
-              {title && <h2 className="text-lg font-semibold text-gray-900">{title}</h2>}
-              {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
+              {title && <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>}
+              {description && <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{description}</p>}
             </div>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors">
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -86,13 +86,13 @@ export function ConfirmDialog({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="sm">
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-        {description && <p className="text-sm text-gray-500 mb-6">{description}</p>}
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{title}</h3>
+        {description && <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{description}</p>}
         <div className="flex gap-3 justify-center">
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
           >
             {cancelLabel}
           </button>

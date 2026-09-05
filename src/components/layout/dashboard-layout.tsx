@@ -84,7 +84,7 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
       </div>
     )
@@ -95,14 +95,14 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
   const pendingApproval = user.organization && user.organization.status !== 'APPROVED' && user.role !== 'ADMIN'
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex transition-colors">
       {/* Sidebar - Desktop */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0 z-30">
-        <div className="flex items-center gap-2 px-6 h-16 border-b border-gray-100">
+      <aside className="hidden lg:flex lg:flex-col lg:w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 fixed inset-y-0 left-0 z-30 transition-colors">
+        <div className="flex items-center gap-2 px-6 h-16 border-b border-gray-100 dark:border-gray-800">
           <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
             <Recycle className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-bold text-gray-900">DawaiSetu</span>
+          <span className="text-lg font-bold text-gray-900 dark:text-gray-100">DawaiSetu</span>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
@@ -113,7 +113,9 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
                 href={item.href}
                 className={cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                  isActive ? 'bg-teal-50 text-teal-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  isActive 
+                    ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 font-semibold' 
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-gray-100'
                 )}
               >
                 <item.icon className="h-4.5 w-4.5" />
@@ -125,8 +127,8 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
             )
           })}
         </nav>
-        <div className="px-3 py-4 border-t border-gray-100">
-          <button onClick={logout} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full transition-colors">
+        <div className="px-3 py-4 border-t border-gray-100 dark:border-gray-800">
+          <button onClick={logout} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-gray-100 w-full transition-colors cursor-pointer">
             <LogOut className="h-4.5 w-4.5" />
             Sign Out
           </button>
@@ -136,16 +138,16 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-          <aside className="fixed inset-y-0 left-0 w-72 bg-white shadow-xl z-50">
-            <div className="flex items-center justify-between px-6 h-16 border-b border-gray-100">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+          <aside className="fixed inset-y-0 left-0 w-72 bg-white dark:bg-gray-900 shadow-xl z-50 transition-colors">
+            <div className="flex items-center justify-between px-6 h-16 border-b border-gray-100 dark:border-gray-800">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
                   <Recycle className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-lg font-bold text-gray-900">DawaiSetu</span>
+                <span className="text-lg font-bold text-gray-900 dark:text-gray-100">DawaiSetu</span>
               </div>
-              <button onClick={() => setSidebarOpen(false)} className="p-1 text-gray-400 hover:text-gray-600">
+              <button onClick={() => setSidebarOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -154,15 +156,18 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
                 const isActive = pathname === item.href
                 return (
                   <Link key={item.href} href={item.href} onClick={() => setSidebarOpen(false)}
-                    className={cn('flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors', isActive ? 'bg-teal-50 text-teal-700' : 'text-gray-600 hover:bg-gray-50')}>
+                    className={cn(
+                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                      isActive ? 'bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-400 font-semibold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-gray-100'
+                    )}>
                     <item.icon className="h-4.5 w-4.5" />
                     {item.label}
                   </Link>
                 )
               })}
             </nav>
-            <div className="px-3 py-4 border-t border-gray-100">
-              <button onClick={logout} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 w-full">
+            <div className="px-3 py-4 border-t border-gray-100 dark:border-gray-800">
+              <button onClick={logout} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/60 w-full cursor-pointer">
                 <LogOut className="h-4.5 w-4.5" /> Sign Out
               </button>
             </div>
@@ -173,26 +178,26 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
       {/* Main Content */}
       <main className="flex-1 lg:ml-64 min-h-screen">
         {/* Top Bar */}
-        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-lg border-b border-gray-200 h-16 flex items-center px-4 sm:px-6 lg:px-8">
-          <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 -ml-2 text-gray-600 hover:text-gray-900">
+        <header className="sticky top-0 z-20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 h-16 flex items-center px-4 sm:px-6 lg:px-8 transition-colors">
+          <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 -ml-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link href={`/${requiredRole.toLowerCase()}/notifications`} className="relative p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+            <Link href={`/${requiredRole.toLowerCase()}/notifications`} className="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
                 <span className="absolute -top-0 -right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{unreadCount > 9 ? '9+' : unreadCount}</span>
               )}
             </Link>
-            <div className="flex items-center gap-2 pl-2 border-l border-gray-200">
-              <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-teal-700">{user.email[0].toUpperCase()}</span>
+            <div className="flex items-center gap-2 pl-2 border-l border-gray-200 dark:border-gray-700">
+              <div className="w-8 h-8 bg-teal-100 dark:bg-teal-950/60 rounded-full flex items-center justify-center">
+                <span className="text-sm font-medium text-teal-700 dark:text-teal-300">{user.email[0].toUpperCase()}</span>
               </div>
               <div className="hidden sm:block">
-                <p className="text-sm font-medium text-gray-900 truncate max-w-[150px]">{user.organization?.name || user.email}</p>
-                <p className="text-xs text-gray-500 capitalize">{user.role.toLowerCase()}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-[150px]">{user.organization?.name || user.email}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{user.role.toLowerCase()}</p>
               </div>
             </div>
           </div>
@@ -200,8 +205,8 @@ export default function DashboardLayout({ children, requiredRole }: { children: 
 
         {/* Pending Approval Banner */}
         {pendingApproval && (
-          <div className="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 lg:px-8 py-3">
-            <div className="flex items-center gap-2 text-sm text-amber-800">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 dark:border-amber-900 px-4 sm:px-6 lg:px-8 py-3">
+            <div className="flex items-center gap-2 text-sm text-amber-800 dark:text-amber-300">
               <ShieldCheck className="h-4 w-4 shrink-0" />
               <p>Your organization is <strong>{user.organization?.status?.toLowerCase()}</strong>. Some features are restricted until admin approval.</p>
             </div>

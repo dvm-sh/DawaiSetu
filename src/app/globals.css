@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   :root {
@@ -16,11 +17,41 @@
   }
 }
 
+/* Fix select option colors across all browsers & operating systems */
+select option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+.dark select option,
+:where(.dark, .dark *) select option {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+/* Ensure placeholder colors are legible in both light and dark themes */
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder,
+:where(.dark, .dark *) input::placeholder,
+:where(.dark, .dark *) textarea::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+.dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
 
 /* Animations */
 @keyframes slideInFromRight {

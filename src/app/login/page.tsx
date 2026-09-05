@@ -7,6 +7,7 @@ import { useAuth } from '@/context/auth-context'
 import { useToast } from '@/components/ui/toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { Recycle, Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
@@ -36,7 +37,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-white dark:bg-gray-950 transition-colors">
       {/* Left Panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-teal-600 to-teal-800 p-12 flex-col justify-between">
         <Link href="/" className="flex items-center gap-2">
@@ -53,22 +54,27 @@ export default function LoginPage() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12">
-        <div className="w-full max-w-md">
-          <div className="lg:hidden mb-8">
+      <div className="flex-1 flex flex-col justify-between p-6 sm:p-12">
+        <div className="flex justify-between items-center w-full">
+          <div className="lg:hidden">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
                 <Recycle className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">DawaiSetu</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-gray-100">DawaiSetu</span>
             </Link>
           </div>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
+        </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h1>
-          <p className="text-gray-600 mb-8">Sign in to your account to continue</p>
+        <div className="w-full max-w-md mx-auto my-auto py-8">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Welcome back</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">Sign in to your account to continue</p>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-xl text-sm text-red-700 dark:text-red-300">
               {error}
             </div>
           )}
@@ -96,7 +102,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
@@ -107,19 +113,23 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-gray-600">
+          <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-teal-600 font-medium hover:text-teal-700">
+            <Link href="/register" className="text-teal-600 dark:text-teal-400 font-medium hover:text-teal-700 dark:hover:text-teal-300">
               Register your organization
             </Link>
           </p>
 
-          <div className="mt-6 p-4 bg-gray-50 rounded-xl text-xs text-gray-500">
-            <p className="font-medium text-gray-700 mb-1">Demo Accounts:</p>
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-500 dark:text-gray-400">
+            <p className="font-medium text-gray-700 dark:text-gray-300 mb-1">Demo Accounts:</p>
             <p>Admin: admin@dawaisetu.com / Admin@123456</p>
             <p>Donor: donor@citypharma.com / Password@123</p>
             <p>Recipient: recipient@cityhospital.com / Password@123</p>
           </div>
+        </div>
+
+        <div className="text-center text-xs text-gray-400">
+          DawaiSetu Medicine Redistribution Platform
         </div>
       </div>
     </div>
