@@ -120,6 +120,8 @@ The `npm run db:seed` command automatically creates several verified demo accoun
 - Image uploads for medicines and inspection reports via AWS S3.
 - OCR scanning for automatic medicine data extraction from labels.
 
+---
+
 ## 🤝 Contributors
 
 We welcome contributions! A huge thanks to the following people who have contributed to DawaiSetu:
