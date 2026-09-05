@@ -1,4 +1,4 @@
-# DawaiSetu (MedCycle) - Medicine Donation & Redistribution Platform
+# DawaiSetu () - Medicine Donation & Redistribution Platform
 
 DawaiSetu is an intelligent, scalable platform designed to connect surplus medicine donors (pharmacies, hospitals, clinics) with organizations in need (NGOs, rural clinics, charitable hospitals).
 
