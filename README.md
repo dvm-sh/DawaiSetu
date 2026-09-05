@@ -119,3 +119,15 @@ The `npm run db:seed` command automatically creates several verified demo accoun
 - Third-party Logistics (3PL) integration for automated shipping label generation.
 - Image uploads for medicines and inspection reports via AWS S3.
 - OCR scanning for automatic medicine data extraction from labels.
+
+## 🤝 Contributors
+
+We welcome contributions! A huge thanks to the following people who have contributed to DawaiSetu:
+
+| Contributor | GitHub Profile | Role / Contribution |
+| :--- | :--- | :--- |
+| **Devansh Mishra** | [@dvm-sh](https://github.com/dvm-sh) | Project Lead / Developer |
+| **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | UI/UX & Frontend |
+| **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | Backend & Database |
+
+*(Want to be on this list? Check out our [Contributing Guidelines](CONTRIBUTING.md) and submit a pull request!)*
