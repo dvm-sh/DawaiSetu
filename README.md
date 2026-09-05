@@ -1,93 +1,121 @@
-# DawaiSetu (Medicine Bridge) 💊🌉
+# DawaiSetu (MedCycle) - Medicine Donation & Redistribution Platform
 
-DawaiSetu is a comprehensive **MedCycle Medicine Platform** designed to streamline and manage the lifecycle, distribution, and analytics of medicines. Built with modern web technologies, it provides a robust interface for administrators and recipients alike, ensuring efficient medicine management.
+DawaiSetu is an intelligent, scalable platform designed to connect surplus medicine donors (pharmacies, hospitals, clinics) with organizations in need (NGOs, rural clinics, charitable hospitals).
 
-## ✨ Features
-
-- **Admin Dashboard**: Manage inventory, track transfers, and oversee operations.
-- **Recipient Analytics**: Detailed insights and visualizations for medicine recipients.
-- **Secure Authentication**: Built-in authentication using JWT (`jose`) and secure password hashing (`bcryptjs`).
-- **Responsive UI**: A highly responsive, accessible, and beautifully designed user interface.
-- **Data Visualizations**: Interactive charts and graphs powered by Recharts.
-- **Database Management**: Robust database schema and migrations managed via Prisma ORM.
-
-## 🛠️ Tech Stack
-
-- **Framework**: [Next.js](https://nextjs.org/) (React 19)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **UI Components**: [Radix UI](https://www.radix-ui.com/)
-- **Database ORM**: [Prisma](https://www.prisma.io/)
-- **Charts**: [Recharts](https://recharts.org/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-
-## 🚀 Getting Started
-
-Follow these steps to set up the project locally.
-
-### Prerequisites
-
-Make sure you have Node.js and npm (or yarn/pnpm/bun) installed on your machine.
-
-### Installation
-
-1. **Clone the repository** (if you haven't already):
-   ```bash
-   git clone <your-repo-url>
-   cd dawaisetu
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Environment Setup**:
-   Create a `.env` file in the root directory based on `.env.example` and add your environment variables (Database URL, Secret Keys, etc.).
-   ```bash
-   cp .env.example .env
-   ```
-
-4. **Database Setup**:
-   Push the schema to your database and run the seed script to populate initial data.
-   ```bash
-   npm run db:reset
-   ```
-
-5. **Start the development server**:
-   ```bash
-   npm run dev
-   ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
-
-## 📜 Available Scripts
-
-In the project directory, you can run the following commands:
-
-- `npm run dev`: Starts the Next.js development server.
-- `npm run build`: Builds the app for production.
-- `npm run start`: Starts the production server.
-- `npm run lint`: Runs ESLint to catch linting errors.
-- `npm run db:push`: Pushes the Prisma schema state to the database.
-- `npm run db:seed`: Seeds the database with initial test data.
-- `npm run db:reset`: Resets the database and runs the seed script.
-- `npm run prisma:studio`: Opens Prisma Studio to view and edit database records visually.
-
-## 🤝 Contributors
-
-We welcome contributions! A huge thanks to the following people who have contributed to DawaiSetu:
-
-| Contributor | GitHub Profile | Role / Contribution |
-| :--- | :--- | :--- |
-| **Devansh Mishra** | [@dvm-sh](https://github.com/dvm-sh) | Project Lead / Developer |
-| **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | UI/UX & Frontend |
-| **Vaibhav Goel** | [@ArthurNoob69](https://github.com/ArthurNoob69) | Backend & Database |
-
-<a href="https://github.com/dvm-sh/DawaiSetu/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=dvm-sh/DawaiSetu" />
-</a>
-
-*(Want to be on this list? Check out our [Contributing Guidelines](CONTRIBUTING.md) and submit a pull request!)*
+The platform enforces strict safety guidelines, AI-assisted matching, and end-to-end tracking to ensure zero waste and maximum impact.
 
 ---
-*Built with ❤️ for a better healthcare future.*
+
+## 🚀 Key Features
+
+### 1. Smart Matching Engine
+- Automated matching of donor inventory to recipient requirements.
+- **Scoring Algorithm:** Prioritizes exact matches, proximity, urgency, and expiry dates to ensure the most critical needs are met first.
+- Prevents the transfer of expired or near-expiry medicines.
+
+### 2. Role-Based Access Control
+The application operates on three distinct user roles, each with custom dashboards:
+- **Admin**: Verifies organizations, oversees global analytics, and monitors the immutable audit log.
+- **Donor**: Manages inventory, performs bulk uploads via CSV, and approves transfer requests.
+- **Recipient**: Posts requirements, searches the global pool, and tracks incoming shipments.
+
+### 3. End-to-End Transfer Tracking
+Every medicine transfer moves through a strict lifecycle:
+- `PENDING` -> `ACCEPTED` -> `IN_TRANSIT` -> `DELIVERED` -> `COMPLETED`.
+- Recipients must submit an inspection report upon delivery to verify cold-chain and packaging integrity.
+
+### 4. Bulk Upload Support
+Donors can rapidly upload large inventories using the Bulk CSV upload feature, which automatically parses and validates entries before insertion.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 14+ (App Router)
+- **Language**: TypeScript
+- **Database**: PostgreSQL (Neon/Supabase)
+- **ORM**: Prisma
+- **Authentication**: JWT (JSON Web Tokens) with secure HTTP-only cookies
+- **Styling**: Tailwind CSS & Radix UI (Accessible components)
+- **Icons**: Lucide React
+- **CSV Parsing**: PapaParse
+
+---
+
+## 💻 Local Development Setup
+
+### 1. Prerequisites
+- Node.js (v18 or higher)
+- A PostgreSQL database (Local or Cloud)
+
+### 2. Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/your-repo/dawaisetu.git
+cd dawaisetu
+npm install
+```
+
+### 3. Environment Variables
+
+Create a `.env.local` file in the root directory and add your variables:
+
+```env
+DATABASE_URL="postgresql://user:password@host:port/database"
+JWT_SECRET="your-super-secure-jwt-secret-key-change-me-in-production"
+```
+
+### 4. Database Initialization
+
+Push the Prisma schema to your database and run the comprehensive seed script to generate demo data (Organizations, Medicines, Matches, etc.):
+
+```bash
+npm run db:push
+npm run db:seed
+```
+
+### 5. Start the Development Server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🧪 Testing the Application (Demo Credentials)
+
+The `npm run db:seed` command automatically creates several verified demo accounts for testing the complete transfer cycle.
+
+| Role | Email | Password | Purpose |
+|------|-------|----------|---------|
+| **Admin** | `admin@dawaisetu.com` | `Admin@123456` | Verify organizations, view global analytics. |
+| **Donor** | `donor@citypharma.com` | `Password@123` | Add inventory (single/bulk), approve transfers. |
+| **Recipient** | `recipient@cityhospital.com` | `Password@123` | Post requirements, accept deliveries. |
+
+### Recommended Test Workflow
+1. **Donor**: Log in and go to **Inventory -> Add Medicine** (Upload via CSV or single entry).
+2. **Recipient**: Log in and go to **Requirements -> Post Need**. Request the same category of medicine the donor just added.
+3. **Recipient**: Go to the **Matches** tab. You should see a high-score match generated by the engine. Click **Request Transfer**.
+4. **Donor**: Check the **Transfers** tab and **Approve** the incoming request. Change status to *In Transit*.
+5. **Recipient**: Check the **Transfers** tab, mark as *Delivered*, and complete the final *Inspection Report*.
+
+---
+
+## 🔒 Security & Compliance
+
+- **No Expired Medicines**: Enforced at the database and API level.
+- **Stateless Auth**: Uses secure JWT tokens stored in HTTP-only cookies. Route protection is handled by Next.js edge Middleware.
+- **Audit Logs**: Every critical action (login, transfer update, org verification) is immutably logged in the `AuditLog` table.
+- **Terms of Service**: Mandatory agreement required during registration regarding medicine quality and proper distribution.
+
+---
+
+## 🔮 Future Enhancements
+- Real-time Email/SMS notifications (via AWS SES / Twilio).
+- Third-party Logistics (3PL) integration for automated shipping label generation.
+- Image uploads for medicines and inspection reports via AWS S3.
+- OCR scanning for automatic medicine data extraction from labels.
