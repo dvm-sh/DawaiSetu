@@ -1,4 +1,5 @@
 'use client'
+
 import { useAuth } from '@/context/auth-context'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { StatusBadge } from '@/components/ui/badge'
@@ -17,8 +18,6 @@ export default function ProfilePage() {
   if (!user) return null
   const org = user.organization as Record<string, string> | undefined
   
-  // Need to initialize editForm inside a function to avoid hydration issues if user is null initially
-  // but since we return null if !user above, we can do this:
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [editForm, setEditForm] = useState({
     contactPerson: org?.contactPerson || '',
@@ -56,40 +55,40 @@ export default function ProfilePage() {
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Organization Profile</h1>
-          <p className="text-gray-600 mt-1">Manage your account and organization details</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Organization Profile</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage your account and organization details</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline"><Settings className="h-4 w-4 mr-2" /> Settings</Button>
+          <Button variant="outline" onClick={() => addToast({ type: 'info', title: 'Settings', message: 'Organization settings are managed by your admin.' })}><Settings className="h-4 w-4 mr-2" /> Settings</Button>
           <Button onClick={() => setIsEditing(true)}><Edit className="h-4 w-4 mr-2" /> Edit Profile</Button>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="h-full">
-          <CardHeader className="pb-4 border-b border-gray-100">
-            <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5 text-teal-600" /> Organization Details</CardTitle>
+          <CardHeader className="pb-4 border-b border-gray-100 dark:border-gray-800">
+            <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5 text-teal-600 dark:text-teal-400" /> Organization Details</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-gray-500">Organization Name</p>
-                <p className="text-gray-900 font-semibold">{org?.name || 'Not provided'}</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Organization Name</p>
+                <p className="text-gray-900 dark:text-gray-100 font-semibold">{org?.name || 'Not provided'}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Type</p>
-                  <p className="text-gray-900 capitalize">{org?.type?.replace(/_/g, ' ').toLowerCase() || 'N/A'}</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Type</p>
+                  <p className="text-gray-900 dark:text-gray-100 capitalize">{org?.type?.replace(/_/g, ' ').toLowerCase() || 'N/A'}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Verification Status</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Verification Status</p>
                   <div className="mt-1"><StatusBadge status={org?.status || 'PENDING'} /></div>
                 </div>
               </div>
-              <hr className="border-gray-100" />
+              <hr className="border-gray-100 dark:border-gray-800" />
               <div>
-                <p className="text-sm font-medium text-gray-500 mb-1 flex items-center gap-1.5"><MapPin className="h-4 w-4" /> Location</p>
-                <p className="text-gray-900 text-sm">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1.5"><MapPin className="h-4 w-4" /> Location</p>
+                <p className="text-gray-900 dark:text-gray-100 text-sm">
                   {org?.city}, {org?.state} <br />
                   {org?.country} - {org?.pincode}
                 </p>
@@ -99,26 +98,26 @@ export default function ProfilePage() {
         </Card>
 
         <Card className="h-full">
-          <CardHeader className="pb-4 border-b border-gray-100">
-            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5 text-teal-600" /> Primary Contact</CardTitle>
+          <CardHeader className="pb-4 border-b border-gray-100 dark:border-gray-800">
+            <CardTitle className="flex items-center gap-2"><User className="h-5 w-5 text-teal-600 dark:text-teal-400" /> Primary Contact</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-gray-500">Contact Person</p>
-                <p className="text-gray-900 font-semibold">{org?.contactPerson || 'Not provided'}</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Contact Person</p>
+                <p className="text-gray-900 dark:text-gray-100 font-semibold">{org?.contactPerson || 'Not provided'}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500 flex items-center gap-1.5 mb-1"><Mail className="h-4 w-4" /> Email Address</p>
-                <p className="text-gray-900 text-sm">{user.email}</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-1"><Mail className="h-4 w-4" /> Email Address</p>
+                <p className="text-gray-900 dark:text-gray-100 text-sm">{user.email}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500 flex items-center gap-1.5 mb-1"><Phone className="h-4 w-4" /> Phone Number</p>
-                <p className="text-gray-900 text-sm">{org?.phone || 'Not provided'}</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-1"><Phone className="h-4 w-4" /> Phone Number</p>
+                <p className="text-gray-900 dark:text-gray-100 text-sm">{org?.phone || 'Not provided'}</p>
               </div>
-              <hr className="border-gray-100" />
+              <hr className="border-gray-100 dark:border-gray-800" />
               <div>
-                <p className="text-sm font-medium text-gray-500">Account Role</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Account Role</p>
                 <div className="mt-1"><StatusBadge status={user.role} /></div>
               </div>
             </div>
@@ -128,11 +127,11 @@ export default function ProfilePage() {
 
       {/* Edit Modal */}
       {isEditing && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 shadow-xl">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-gray-800">
               <h2 className="text-lg font-bold">Edit Profile</h2>
-              <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-gray-600"><X className="h-5 w-5" /></button>
+              <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><X className="h-5 w-5" /></button>
             </div>
             <div className="p-6 overflow-y-auto">
               <form id="edit-form" onSubmit={handleEditSubmit} className="space-y-4">
@@ -146,7 +145,7 @@ export default function ProfilePage() {
                 <Input label="PIN / ZIP" value={editForm.pincode} onChange={e => setEditForm(p => ({...p, pincode: e.target.value}))} required />
               </form>
             </div>
-            <div className="p-6 border-t border-gray-100 flex justify-end gap-3 bg-gray-50">
+            <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3 bg-gray-50 dark:bg-gray-800/50">
               <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
               <Button type="submit" form="edit-form" isLoading={isSubmitting}>Save Changes</Button>
             </div>
