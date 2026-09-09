@@ -26,7 +26,9 @@ export async function GET(request: NextRequest) {
       prisma.notification.count({ where: { userId: session.user.id, isRead: false } }),
     ])
 
-    return successResponse({ notifications, unreadCount, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })
+    const response = successResponse({ notifications, unreadCount, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })
+    response.headers.set('Cache-Control', 'private, max-age=5, stale-while-revalidate=30')
+    return response
   } catch (error) {
     return handleApiError(error)
   }

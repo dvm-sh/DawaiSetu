@@ -33,7 +33,7 @@ async function getUserFromCookie() {
 
 export default async function HomePage() {
   const user = await getUserFromCookie()
-  const dashboardUrl = user?.role === 'ADMIN' ? '/admin' : user?.role === 'DONOR' ? '/donor' : '/recipient'
+  const dashboardUrl = '/dashboard'
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors flex flex-col selection:bg-teal-600 selection:text-white">
@@ -43,11 +43,10 @@ export default async function HomePage() {
       {/* Main Content */}
       <main className="flex-1 space-y-24 sm:space-y-32 pb-24 pt-24">
         {/* HERO SECTION */}
-        <section className="pt-8 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column - Headline & CTAs */}
-            <div className="lg:col-span-7 space-y-8 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 text-xs font-medium">
+        <section className="pt-8 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center">
+            {/* Headline & CTAs */}
+            <div className="space-y-8 text-center max-w-3xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 text-xs font-medium justify-center">
                 <ShieldCheck className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0" />
                 <span>Verified Surplus Medicine Redistribution Platform</span>
               </div>
@@ -56,17 +55,17 @@ export default async function HomePage() {
                 <h1 className="text-4xl sm:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.12]">
                   Connecting Surplus Medicine with <span className="text-teal-600 dark:text-teal-400">Patients in Need</span>.
                 </h1>
-                <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl">
+                <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal mx-auto">
                   DawaiSetu enables licensed pharmacies, hospital chains, and pharmaceutical distributors to safely redistribute unexpired surplus inventory to accredited health NGOs and rural clinics.
                 </p>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
                 {user ? (
                   <Link
                     href={dashboardUrl}
-                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm w-full sm:w-auto"
                   >
                     <span>Go to Dashboard</span>
                     <ChevronRight className="h-4 w-4" />
@@ -75,14 +74,14 @@ export default async function HomePage() {
                   <>
                     <Link
                       href="/register"
-                      className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
+                      className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm w-full sm:w-auto"
                     >
                       <span>Register Organization</span>
                       <ChevronRight className="h-4 w-4" />
                     </Link>
                     <Link
                       href="/how-it-works"
-                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-800 transition-colors"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-800 transition-colors w-full sm:w-auto"
                     >
                       <span>How Redistribution Works</span>
                     </Link>
@@ -91,7 +90,7 @@ export default async function HomePage() {
               </div>
 
               {/* Core Safety Commitments */}
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+              <div className="flex flex-wrap justify-center gap-6 pt-6 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                   <span>Drug License Verified</span>
@@ -106,56 +105,6 @@ export default async function HomePage() {
                 </div>
               </div>
             </div>
-
-            {/* Right Column - Live Operational Card */}
-            <div className="lg:col-span-5">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950 border border-teal-200 dark:border-teal-800 flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold">
-                      DS
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-slate-900 dark:text-white text-sm">Platform Telemetry</h3>
-                      <p className="text-xs text-slate-500 font-mono">Real-Time Overview</p>
-                    </div>
-                  </div>
-                  <span className="px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-mono font-medium border border-emerald-200 dark:border-emerald-800">
-                    Operational
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-1">
-                    <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Preserved Medicine</span>
-                    <span className="text-2xl font-extrabold text-slate-900 dark:text-white">105,400+</span>
-                    <span className="text-[11px] text-teal-700 dark:text-teal-400 font-semibold block">Units Redistributed</span>
-                  </div>
-                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-1">
-                    <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Verified Entities</span>
-                    <span className="text-2xl font-extrabold text-slate-900 dark:text-white">480+</span>
-                    <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold block">Pharmacies & NGOs</span>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 space-y-2">
-                  <span className="text-xs text-slate-500 font-semibold uppercase block tracking-wider">Active Match Protocol</span>
-                  <p className="text-xs text-slate-800 dark:text-slate-200 font-medium">
-                    Amoxicillin 500mg matched from <span className="font-semibold text-slate-900 dark:text-white">City Care Pharmacy</span> to <span className="font-semibold text-slate-900 dark:text-white">Hope Rural Trust</span>.
-                  </p>
-                  <div className="flex justify-between items-center pt-2 text-[11px] text-slate-500 border-t border-slate-200 dark:border-slate-700">
-                    <span>Expiry: 14 Months</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">100% Quality Inspected</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 text-xs text-slate-600 dark:text-slate-400">
-                  <Award className="h-4 w-4 text-teal-600 shrink-0" />
-                  <span>Compliant with Indian Drugs & Cosmetics Act</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* PROCESS SECTION */}

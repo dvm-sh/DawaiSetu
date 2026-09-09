@@ -3,7 +3,7 @@ import { jwtVerify } from 'jose'
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback-secret-change-me')
 
-const PUBLIC_PATHS = ['/', '/login', '/register', '/about', '/how-it-works', '/contact', '/api/auth/login', '/api/auth/register', '/terms', '/faq', '/privacy']
+const PUBLIC_PATHS = ['/', '/login', '/register', '/about', '/how-it-works', '/contact', '/api/auth/login', '/api/auth/register', '/api/upload', '/terms', '/faq', '/privacy']
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -44,10 +44,10 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith('/admin') && role !== 'ADMIN') {
       return NextResponse.redirect(new URL(role === 'DONOR' ? '/donor' : '/recipient', request.url))
     }
-    if (pathname.startsWith('/donor') && role !== 'DONOR') {
+    if (pathname.startsWith('/donor') && role !== 'DONOR' && role !== 'ADMIN') {
       return NextResponse.redirect(new URL(role === 'ADMIN' ? '/admin' : '/recipient', request.url))
     }
-    if (pathname.startsWith('/recipient') && role !== 'RECIPIENT') {
+    if (pathname.startsWith('/recipient') && role !== 'RECIPIENT' && role !== 'ADMIN') {
       return NextResponse.redirect(new URL(role === 'ADMIN' ? '/admin' : '/donor', request.url))
     }
 

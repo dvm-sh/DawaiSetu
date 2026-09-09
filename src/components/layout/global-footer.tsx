@@ -19,10 +19,6 @@ export function GlobalFooter() {
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
               India&apos;s verified surplus medicine redistribution platform. Connecting donors, verified pharmacies, and healthcare non-profits to eliminate medicine waste and save lives.
             </p>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-800/80 text-emerald-400 text-xs font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Redistribution Network: Active</span>
-            </div>
           </div>
 
           {/* Quick Links */}

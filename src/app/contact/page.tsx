@@ -145,7 +145,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs text-teal-200 uppercase font-mono font-semibold tracking-wider">Email Communication</p>
-                      <p className="font-semibold text-white text-sm">support@dawaisetu.com</p>
+                      <p className="font-semibold text-white text-sm">support@miet.college</p>
                       <p className="text-[11px] text-teal-200/80">Average response time: 2 hours</p>
                     </div>
                   </motion.div>
@@ -173,8 +173,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs text-teal-200 uppercase font-mono font-semibold tracking-wider">National Office</p>
-                      <p className="font-semibold text-white text-sm">BKC Financial Center, Mumbai</p>
-                      <p className="text-[11px] text-teal-200/80">Maharashtra, 400051, India</p>
+                      <p className="font-semibold text-white text-sm">DawaiSetu Officee, Meerut</p>
+                      <p className="text-[11px] text-teal-200/80">UP, 400051, India</p>
                     </div>
                   </motion.div>
 
@@ -250,11 +250,10 @@ export default function ContactPage() {
                               key={cat.id}
                               type="button"
                               onClick={() => setCategory(cat.id)}
-                              className={`p-3 rounded-2xl text-left border transition-all flex items-center gap-2.5 cursor-pointer text-xs font-medium ${
-                                isSelected
-                                  ? 'bg-teal-50 dark:bg-teal-950/60 border-teal-500 text-teal-900 dark:text-teal-200 shadow-sm'
-                                  : 'bg-gray-50/50 dark:bg-gray-800/40 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700'
-                              }`}
+                              className={`p-3 rounded-2xl text-left border transition-all flex items-center gap-2.5 cursor-pointer text-xs font-medium ${isSelected
+                                ? 'bg-teal-50 dark:bg-teal-950/60 border-teal-500 text-teal-900 dark:text-teal-200 shadow-sm'
+                                : 'bg-gray-50/50 dark:bg-gray-800/40 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700'
+                                }`}
                             >
                               <Icon className={`h-4 w-4 shrink-0 ${isSelected ? 'text-teal-600 dark:text-teal-400' : 'text-gray-400'}`} />
                               <span className="truncate">{cat.label}</span>

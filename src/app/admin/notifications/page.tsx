@@ -61,7 +61,7 @@ export default function AdminNotificationsPage() {
                   </div>
                   <p className="text-sm text-gray-600 mb-3">{n.message as string}</p>
                   <div className="flex items-center gap-4">
-                    {n.actionUrl && (
+                    {Boolean(n.actionUrl) && (
                       <Link href={n.actionUrl as string} className="text-sm font-medium text-teal-600 hover:text-teal-700">
                         View Details
                       </Link>

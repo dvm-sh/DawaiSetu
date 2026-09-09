@@ -1,121 +1,76 @@
-# DawaiSetu (MedCycle) - Medicine Donation & Redistribution Platform
+# DawaiSetu - Smart Medicine Redistribution Platform
 
-DawaiSetu is an intelligent, scalable platform designed to connect surplus medicine donors (pharmacies, hospitals, clinics) with organizations in need (NGOs, rural clinics, charitable hospitals).
+## 🌟 Overview
+DawaiSetu (Hindi for "Medicine Bridge") is a comprehensive, state-of-the-art web application designed to connect medical institutions that have surplus, unexpired medicines with organizations and individuals in dire need of them. 
 
-The platform enforces strict safety guidelines, AI-assisted matching, and end-to-end tracking to ensure zero waste and maximum impact.
+By preventing perfectly usable medicines from ending up in landfills, DawaiSetu not only reduces biomedical waste but also provides critical healthcare access to underserved communities. The platform handles end-to-end logistics, rigorous compliance checks, automated matching, and secure document verification.
 
----
+## 🚀 Key Features & User Flow
+DawaiSetu operates with three primary user roles, ensuring a secure and regulated environment:
 
-## 🚀 Key Features
+### 1. Donor Hub (Pharmacies, Hospitals, NGOs)
+- **Inventory Management:** Donors can digitally log their surplus medicines, including generic names, batch numbers, and expiry dates.
+- **Smart Matching:** The system automatically notifies donors if a recipient has posted a requirement for their uploaded medicines.
+- **Secure Transfers:** Donors can initiate secure transfers with end-to-end tracking.
+- **Disposal Hub:** For medicines that are expired or unsafe, donors are routed to safe, environmentally-compliant disposal facilities.
 
-### 1. Smart Matching Engine
-- Automated matching of donor inventory to recipient requirements.
-- **Scoring Algorithm:** Prioritizes exact matches, proximity, urgency, and expiry dates to ensure the most critical needs are met first.
-- Prevents the transfer of expired or near-expiry medicines.
+### 2. Recipient Hub (Clinics, Shelters, Patients)
+- **Global Search:** Recipients can search the national inventory for specific medicines.
+- **Requirement Posting:** If a medicine is unavailable, recipients can post a "Medicine Need," acting as an active request.
+- **Automated Alerts:** When a donor uploads a medicine matching their need, the recipient is instantly notified.
 
-### 2. Role-Based Access Control
-The application operates on three distinct user roles, each with custom dashboards:
-- **Admin**: Verifies organizations, oversees global analytics, and monitors the immutable audit log.
-- **Donor**: Manages inventory, performs bulk uploads via CSV, and approves transfer requests.
-- **Recipient**: Posts requirements, searches the global pool, and tracks incoming shipments.
+### 3. System Administrator (Compliance & Security)
+- **Rigorous Onboarding:** Every organization must upload state-issued Drug Licenses, NGO Registrations, and Authorized Representative Details.
+- **Document Audit:** Admins review these documents via the built-in document viewer to Grant or Reject accreditation.
+- **System Oversight:** Admins have full access to both the Donor and Recipient hubs to monitor the entire health exchange, track audits, and suspend malicious entities.
 
-### 3. End-to-End Transfer Tracking
-Every medicine transfer moves through a strict lifecycle:
-- `PENDING` -> `ACCEPTED` -> `IN_TRANSIT` -> `DELIVERED` -> `COMPLETED`.
-- Recipients must submit an inspection report upon delivery to verify cold-chain and packaging integrity.
+## 💻 Tech Stack & Architecture
 
-### 4. Bulk Upload Support
-Donors can rapidly upload large inventories using the Bulk CSV upload feature, which automatically parses and validates entries before insertion.
+### Frontend (Client-Side)
+- **Framework:** **Next.js 14** (App Router) for Server-Side Rendering (SSR) and optimized performance.
+- **Language:** **TypeScript** for strict type-safety and robust code architecture.
+- **Styling:** **Tailwind CSS** for modern, responsive, and custom UI components without leaving the HTML.
+- **Animations:** **Framer Motion** for fluid page transitions, micro-interactions, and professional UI polish.
+- **Icons:** **Lucide React** for clean, scalable vector icons.
 
----
+### Backend (Server-Side)
+- **Runtime:** **Node.js** handling API routes directly within Next.js.
+- **Database ORM:** **Prisma** for type-safe database queries and automated schema migrations.
+- **Database:** **PostgreSQL** (hosted on **Neon DB**) for highly scalable, relational data storage.
+- **Authentication:** Custom JWT (JSON Web Token) implementation securely stored in HttpOnly browser cookies, handled via **Jose** for edge-compatible verification.
+- **File Storage:** **Supabase Storage** for secure, scalable hosting of organizational compliance documents (PDFs, Images).
 
-## 🛠️ Technology Stack
+### APIs & Integrations
+- **Resend API:** Integrated for robust transactional emails. Sends automated notifications regarding Registration Approvals, Rejections, and Suspensions directly to the organization's inbox.
+- **Supabase SDK:** Used strictly with a Service Role key on the backend to bypass restrictive RLS policies while maintaining high security.
 
-- **Framework**: Next.js 14+ (App Router)
-- **Language**: TypeScript
-- **Database**: PostgreSQL (Neon/Supabase)
-- **ORM**: Prisma
-- **Authentication**: JWT (JSON Web Tokens) with secure HTTP-only cookies
-- **Styling**: Tailwind CSS & Radix UI (Accessible components)
-- **Icons**: Lucide React
-- **CSV Parsing**: PapaParse
+## 🛡️ Security & Compliance
+- **Edge Middleware:** A custom Next.js middleware intercepts every request. It validates JWT tokens, enforces role-based routing (e.g., blocking Donors from Recipient pages), and locks down APIs.
+- **Institutional Accreditation:** Accounts are frozen in a `PENDING` state until their legal documents are manually audited and approved by the compliance team.
+- **Audit Logs:** Every action (document approval, medicine transfer, rejection) is permanently recorded in an immutable Audit Log for legal compliance.
 
----
+## 🚦 Getting Started (Local Development)
 
-## 💻 Local Development Setup
+1. **Clone the repository**
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Environment Setup:** Create a `.env` file containing the necessary keys for NeonDB, Supabase, Resend, and your JWT Secret.
+4. **Database Migration:**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+5. **Run the Development Server:**
+   ```bash
+   npm run dev
+   ```
+6. Visit `http://localhost:3000` to access the platform.
 
-### 1. Prerequisites
-- Node.js (v18 or higher)
-- A PostgreSQL database (Local or Cloud)
-
-### 2. Installation
-
-Clone the repository and install dependencies:
-
-```bash
-git clone https://github.com/your-repo/dawaisetu.git
-cd dawaisetu
-npm install
-```
-
-### 3. Environment Variables
-
-Create a `.env.local` file in the root directory and add your variables:
-
-```env
-DATABASE_URL="postgresql://user:password@host:port/database"
-JWT_SECRET="your-super-secure-jwt-secret-key-change-me-in-production"
-```
-
-### 4. Database Initialization
-
-Push the Prisma schema to your database and run the comprehensive seed script to generate demo data (Organizations, Medicines, Matches, etc.):
-
-```bash
-npm run db:push
-npm run db:seed
-```
-
-### 5. Start the Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 🧪 Testing the Application (Demo Credentials)
-
-The `npm run db:seed` command automatically creates several verified demo accounts for testing the complete transfer cycle.
-
-| Role | Email | Password | Purpose |
-|------|-------|----------|---------|
-| **Admin** | `admin@dawaisetu.com` | `Admin@123456` | Verify organizations, view global analytics. |
-| **Donor** | `donor@citypharma.com` | `Password@123` | Add inventory (single/bulk), approve transfers. |
-| **Recipient** | `recipient@cityhospital.com` | `Password@123` | Post requirements, accept deliveries. |
-
-### Recommended Test Workflow
-1. **Donor**: Log in and go to **Inventory -> Add Medicine** (Upload via CSV or single entry).
-2. **Recipient**: Log in and go to **Requirements -> Post Need**. Request the same category of medicine the donor just added.
-3. **Recipient**: Go to the **Matches** tab. You should see a high-score match generated by the engine. Click **Request Transfer**.
-4. **Donor**: Check the **Transfers** tab and **Approve** the incoming request. Change status to *In Transit*.
-5. **Recipient**: Check the **Transfers** tab, mark as *Delivered*, and complete the final *Inspection Report*.
-
----
-
-## 🔒 Security & Compliance
-
-- **No Expired Medicines**: Enforced at the database and API level.
-- **Stateless Auth**: Uses secure JWT tokens stored in HTTP-only cookies. Route protection is handled by Next.js edge Middleware.
-- **Audit Logs**: Every critical action (login, transfer update, org verification) is immutably logged in the `AuditLog` table.
-- **Terms of Service**: Mandatory agreement required during registration regarding medicine quality and proper distribution.
-
----
-
-## 🔮 Future Enhancements
-- Real-time Email/SMS notifications (via AWS SES / Twilio).
-- Third-party Logistics (3PL) integration for automated shipping label generation.
-- Image uploads for medicines and inspection reports via AWS S3.
-- OCR scanning for automatic medicine data extraction from labels.
+## 🎤 Presentation Talking Points
+If presenting this project, make sure to highlight:
+1. **The Core Problem:** Billions of dollars worth of viable medicines are destroyed annually while millions cannot afford basic healthcare.
+2. **The Security:** Emphasize that this isn't just a marketplace; it's a *regulated health exchange*. Point out the rigorous document verification and Admin dashboard.
+3. **The User Experience:** Show off the modern Glassmorphic design, smooth Framer Motion animations, and instant "Smart Matching" notifications.
+4. **The Tech Elegance:** Mention the use of Next.js App Router and Prisma to create a lightning-fast, full-stack application in a single codebase.

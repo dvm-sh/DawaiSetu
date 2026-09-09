@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data.success) {
         setUser(data.data.user)
         const role = data.data.user.role
-        const redirectUrl = role === 'ADMIN' ? '/admin' : role === 'DONOR' ? '/donor' : '/recipient'
+        const redirectUrl = '/dashboard'
         return { success: true, redirectUrl }
       }
       return { success: false, error: data.error || 'Login failed' }

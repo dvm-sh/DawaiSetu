@@ -3,13 +3,15 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
 import { useAuth } from '@/context/auth-context'
 import { useToast } from '@/components/ui/toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Recycle, Eye, EyeOff, ShieldCheck, Heart, Pill, Sparkles, ArrowRight } from 'lucide-react'
+import {
+  Recycle, Eye, EyeOff, ShieldCheck, Lock, CheckCircle2,
+  Building2, ArrowRight, HelpCircle, AlertCircle
+} from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -24,6 +26,7 @@ export default function LoginPage() {
   const handleQuickLogin = (demoEmail: string, demoPass: string) => {
     setEmail(demoEmail)
     setPassword(demoPass)
+    setError('')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,175 +37,187 @@ export default function LoginPage() {
     const result = await login(email, password)
 
     if (result.success && result.redirectUrl) {
-      addToast({ type: 'success', title: 'Welcome back!', message: 'Login successful' })
+      addToast({ type: 'success', title: 'Welcome back', message: 'Authentication verified successfully.' })
       router.push(result.redirectUrl)
     } else {
-      setError(result.error || 'Login failed')
+      setError(result.error || 'Invalid credentials or organization not approved.')
     }
     setIsLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors relative overflow-hidden">
-      {/* Left 3D Visual Panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-teal-600 via-emerald-600 to-teal-900 p-12 flex-col justify-between relative overflow-hidden">
-        {/* Background ambient lighting */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-teal-400/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+      {/* Left Institutional Information Column */}
+      <div className="lg:w-5/12 bg-slate-900 text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800">
+        <div>
+          {/* Platform Identity */}
+          <Link href="/" className="inline-flex items-center gap-3">
+            <div className="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center text-white">
+              <Recycle className="h-6 w-6" />
+            </div>
+            <div>
+              <span className="text-xl font-bold tracking-tight text-white block">DawaiSetu</span>
+              <span className="text-[10px] text-slate-400 font-mono tracking-wide uppercase block">Healthcare Redistribution Portal</span>
+            </div>
+          </Link>
 
-        <Link href="/" className="flex items-center gap-3 z-10">
-          <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 shadow-md">
-            <Recycle className="h-6 w-6 text-white" />
+          {/* Institutional Mission & Compliance Note */}
+          <div className="mt-12 space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold text-white tracking-tight leading-snug">
+                Secure National Medicine Exchange Network
+              </h2>
+              <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+                A regulatory-compliant infrastructure connecting licensed pharmaceutical distributors, hospital pharmacies, and verified non-profit healthcare providers to eliminate medicine waste.
+              </p>
+            </div>
+
+            {/* Platform Trust Attributes */}
+            <div className="space-y-3 pt-4 border-t border-slate-800">
+              <div className="flex items-start gap-3 text-xs text-slate-300">
+                <CheckCircle2 className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
+                <span><strong>License Verification:</strong> Every organization is verified against State Drug Control department records.</span>
+              </div>
+              <div className="flex items-start gap-3 text-xs text-slate-300">
+                <CheckCircle2 className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
+                <span><strong>Expiry Gatekeeping:</strong> Automated safeguards prevent expired or near-expiry batches from redistribution.</span>
+              </div>
+              <div className="flex items-start gap-3 text-xs text-slate-300">
+                <CheckCircle2 className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
+                <span><strong>End-to-End Auditing:</strong> Physical inspections and digital chain-of-custody for every medicine unit.</span>
+              </div>
+            </div>
           </div>
-          <span className="text-2xl font-bold text-white tracking-tight">DawaiSetu</span>
-        </Link>
-
-        {/* Floating 3D Cards Stack */}
-        <div className="relative z-10 perspective-[1000px] my-auto py-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30, rotateX: 10 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            transition={{ duration: 0.8 }}
-            className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border border-white/25 shadow-2xl text-white space-y-6"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                <Sparkles className="h-5 w-5 text-teal-200" />
-              </div>
-              <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-teal-100 font-semibold">Verification System</span>
-                <h3 className="font-bold text-lg text-white">Direct Redistribution Hub</h3>
-              </div>
-            </div>
-
-            <p className="text-teal-50 text-base leading-relaxed">
-              Connecting surplus medicine donors with healthcare organizations in real-time. Zero waste, maximum impact.
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/20 text-xs">
-              <div className="p-3 bg-white/10 rounded-xl border border-white/15">
-                <span className="text-teal-200 block">Verified Entities</span>
-                <span className="text-lg font-bold text-white">100% Inspected</span>
-              </div>
-              <div className="p-3 bg-white/10 rounded-xl border border-white/15">
-                <span className="text-teal-200 block">Transfer Security</span>
-                <span className="text-lg font-bold text-white">Cold-Chain Lock</span>
-              </div>
-            </div>
-          </motion.div>
         </div>
 
-        <p className="text-teal-200 text-xs z-10">&copy; {new Date().getFullYear()} DawaiSetu. All rights reserved.</p>
+        {/* Footer Support Info */}
+        <div className="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-400">
+          <div className="flex items-center gap-2">
+            <Lock className="h-3.5 w-3.5 text-slate-400" />
+            <span>256-Bit SSL Encrypted Session</span>
+          </div>
+          <Link href="/contact" className="hover:text-teal-400 underline underline-offset-4">
+            Need Technical Support?
+          </Link>
+        </div>
       </div>
 
-      {/* Right Column Form */}
-      <div className="flex-1 flex flex-col justify-between p-6 sm:p-12 relative z-10">
-        <div className="flex justify-between items-center w-full">
-          <div className="lg:hidden">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-teal-600 rounded-xl flex items-center justify-center text-white">
-                <Recycle className="h-5 w-5" />
-              </div>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">DawaiSetu</span>
-            </Link>
-          </div>
-          <div className="ml-auto">
-            <ThemeToggle />
-          </div>
+      {/* Right Login Interaction Column */}
+      <div className="flex-1 flex flex-col justify-between p-6 sm:p-12 lg:p-16">
+        {/* Top Controls */}
+        <div className="flex justify-between items-center w-full max-w-lg mx-auto">
+          <Link href="/" className="lg:hidden inline-flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-teal-600">
+            <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
+          </Link>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="w-full max-w-md mx-auto my-auto py-8"
-        >
-          <div className="text-center sm:text-left mb-8">
-            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">Welcome back</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Sign in to your organization account to continue</p>
+        {/* Central Form Container */}
+        <div className="w-full max-w-md mx-auto my-auto py-8">
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Organization Sign In</h1>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              Enter your authorized organization credentials to access the portal
+            </p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-2xl text-sm text-red-700 dark:text-red-300">
-              {error}
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-lg text-sm text-red-700 dark:text-red-300 flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 shrink-0 text-red-500 mt-0.5" />
+              <div>
+                <p className="font-medium">Authentication Failed</p>
+                <p className="text-xs mt-0.5">{error}</p>
+              </div>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label="Email"
+              label="Registered Email Address"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
+              placeholder="e.g., inventory@cityhospital.org"
               required
               autoComplete="email"
             />
+
             <div className="relative">
               <Input
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                placeholder="Enter account password"
                 required
                 autoComplete="current-password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
+                className="absolute right-3 top-[34px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
 
-            <Button type="submit" className="w-full h-12 text-base rounded-xl font-semibold shadow-lg shadow-teal-600/20" isLoading={isLoading}>
-              Sign In
+            <Button
+              type="submit"
+              className="w-full h-11 text-sm font-semibold rounded-md shadow-sm mt-2"
+              isLoading={isLoading}
+            >
+              Sign In to Organization Dashboard
             </Button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-            Don&apos;t have an account?{' '}
+          {/* Registration Referral */}
+          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 text-center text-sm text-slate-600 dark:text-slate-400">
+            <span>Don&apos;t have an accredited account? </span>
             <Link href="/register" className="text-teal-600 dark:text-teal-400 font-semibold hover:underline">
               Register your organization
             </Link>
-          </p>
+          </div>
 
-          {/* Clickable Quick Demo Logins */}
-          <div className="mt-8 p-5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-xs space-y-3">
-            <p className="font-bold text-gray-800 dark:text-gray-200 flex items-center justify-between">
-              <span>Quick Demo Sign In:</span>
-              <span className="text-[10px] text-teal-600 dark:text-teal-400 font-normal">Click to fill</span>
-            </p>
+          {/* Quick Demo Credentials Panel */}
+          <div className="mt-8 p-4 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg">
+            <div className="flex items-center justify-between mb-2.5">
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide">
+                Evaluation Demo Accounts
+              </span>
+              <span className="text-[11px] text-teal-600 dark:text-teal-400">Click to autofill</span>
+            </div>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => handleQuickLogin('admin@dawaisetu.com', 'Admin@123456')}
-                className="p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-200 hover:border-teal-500 transition-colors cursor-pointer text-center"
+                className="p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md font-medium text-xs text-slate-800 dark:text-slate-200 hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-slate-700 transition-colors text-center cursor-pointer"
               >
-                Admin
+                <span className="block font-semibold">Admin</span>
+                <span className="text-[10px] text-slate-500 block">Compliance</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('donor@citypharma.com', 'Password@123')}
-                className="p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-200 hover:border-teal-500 transition-colors cursor-pointer text-center"
+                className="p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md font-medium text-xs text-slate-800 dark:text-slate-200 hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-slate-700 transition-colors text-center cursor-pointer"
               >
-                Donor
+                <span className="block font-semibold">Donor Org</span>
+                <span className="text-[10px] text-slate-500 block">Pharmacy</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('recipient@cityhospital.com', 'Password@123')}
-                className="p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-200 hover:border-teal-500 transition-colors cursor-pointer text-center"
+                className="p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md font-medium text-xs text-slate-800 dark:text-slate-200 hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-slate-700 transition-colors text-center cursor-pointer"
               >
-                Recipient
+                <span className="block font-semibold">Recipient</span>
+                <span className="text-[10px] text-slate-500 block">Hospital</span>
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        <div className="text-center text-xs text-gray-400">
-          DawaiSetu Medicine Redistribution Platform
+        {/* Security Disclaimers */}
+        <div className="w-full max-w-md mx-auto text-center text-[11px] text-slate-500 dark:text-slate-500">
+          This system is intended strictly for accredited healthcare representatives. Unauthorized access attempts are monitored and recorded.
         </div>
       </div>
     </div>

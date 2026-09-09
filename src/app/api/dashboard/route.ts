@@ -9,13 +9,19 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') || 'overview'
 
+    let result
     if (session.user.role === 'ADMIN') {
-      return getAdminStats(type)
+      result = await getAdminStats(type)
     } else if (session.user.role === 'DONOR') {
-      return getDonorStats(session.organization!.id, type)
+      result = await getDonorStats(session.organization!.id, type)
     } else {
-      return getRecipientStats(session.organization!.id, type)
+      result = await getRecipientStats(session.organization!.id, type)
     }
+
+    // Add HTTP caching to prevent rapid database hits (cache for 15 seconds)
+    result.headers.set('Cache-Control', 'private, max-age=15, stale-while-revalidate=60')
+    return result
+
   } catch (error) {
     return handleApiError(error)
   }

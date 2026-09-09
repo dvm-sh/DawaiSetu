@@ -4,7 +4,7 @@ import { requireApprovedOrg } from '@/lib/auth'
 import { successResponse, errorResponse, handleApiError } from '@/lib/api-response'
 import { getDaysRemaining, getExpiryCategory } from '@/lib/utils'
 import { ExpiryCategory } from '@prisma/client'
-import { runMatchingEngine } from '@/lib/matching'
+import { runMatchingForMedicine } from '@/lib/matching'
 
 export async function POST(req: NextRequest) {
   try {
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
       createdMedicines.push(medicine)
       
       // Run match asynchronously
-      runMatchingEngine(medicine.id).catch(console.error)
+      runMatchingForMedicine(medicine.id).catch(console.error)
     }
 
     return successResponse({ 

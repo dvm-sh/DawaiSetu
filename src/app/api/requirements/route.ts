@@ -43,7 +43,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await requireApprovedOrg()
-    if (session.user.role !== 'RECIPIENT') return errorResponse('Only recipients can create requirements', 403)
+    if (!session.organization || session.organization.status !== 'APPROVED') {
+      return errorResponse('Only approved organizations can create requirements', 403)
+    }
 
     const body = await request.json()
     const errors: Record<string, string> = {}

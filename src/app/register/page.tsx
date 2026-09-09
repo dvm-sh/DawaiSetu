@@ -30,11 +30,19 @@ export default function RegisterPage() {
     contactPerson: '', phone: '', email: '', password: '', confirmPassword: '', website: '', registrationNumber: '',
     drugLicense: '', orgRegistration: '', authRepDetails: '', requiredAgreement: '', otherDocs: ''
   })
+  const [files, setFiles] = useState<Record<string, File | null>>({
+    drugLicense: null, orgRegistration: null, authRepDetails: null, requiredAgreement: null, otherDocs: null
+  })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const updateField = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) setErrors(prev => { const n = { ...prev }; delete n[field]; return n })
+  }
+
+  const handleFileChange = (field: string, file: File | null) => {
+    setFiles(prev => ({ ...prev, [field]: file }))
+    updateField(field, file ? file.name : '')
   }
 
   const validateStep2 = () => {
@@ -71,7 +79,39 @@ export default function RegisterPage() {
     setIsLoading(true)
     setError('')
 
-    const result = await register({ ...formData, role })
+    const uploadedUrls: Record<string, string> = {}
+    
+    // Upload files to Supabase
+    for (const [key, file] of Object.entries(files)) {
+      if (file) {
+        try {
+          const fd = new FormData()
+          fd.append('file', file)
+          fd.append('folder', 'organization-docs')
+          const res = await fetch('/api/upload', { method: 'POST', body: fd })
+          const data = await res.json()
+          if (data.success) {
+            uploadedUrls[key] = data.url
+          } else {
+            console.warn(`Supabase upload failed for ${key} with error:`, data.error)
+          }
+        } catch (e) {
+          console.warn(`Supabase upload threw an exception for ${key}:`, e)
+        }
+      }
+    }
+
+    const finalData = {
+      ...formData,
+      role,
+      drugLicense: uploadedUrls.drugLicense || formData.drugLicense,
+      orgRegistration: uploadedUrls.orgRegistration || formData.orgRegistration,
+      authRepDetails: uploadedUrls.authRepDetails || formData.authRepDetails,
+      requiredAgreement: uploadedUrls.requiredAgreement || formData.requiredAgreement,
+      otherDocs: uploadedUrls.otherDocs || formData.otherDocs
+    }
+
+    const result = await register(finalData)
     if (result.success) {
       setSuccess(true)
       addToast({ type: 'success', title: 'Registration successful!', message: 'Your organization is pending verification.' })
@@ -220,22 +260,22 @@ export default function RegisterPage() {
                     <div className="space-y-3">
                       <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Drug License *</label>
-                        <input type="file" onChange={(e) => updateField('drugLicense', e.target.files?.[0]?.name || '')} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
+                        <input type="file" onChange={(e) => handleFileChange('drugLicense', e.target.files?.[0] || null)} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
                         {errors.drugLicense && <p className="text-xs text-red-500 mt-1">{errors.drugLicense}</p>}
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Organization Registration *</label>
-                        <input type="file" onChange={(e) => updateField('orgRegistration', e.target.files?.[0]?.name || '')} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
+                        <input type="file" onChange={(e) => handleFileChange('orgRegistration', e.target.files?.[0] || null)} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
                         {errors.orgRegistration && <p className="text-xs text-red-500 mt-1">{errors.orgRegistration}</p>}
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Authorized Representative Details *</label>
-                        <input type="file" onChange={(e) => updateField('authRepDetails', e.target.files?.[0]?.name || '')} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
+                        <input type="file" onChange={(e) => handleFileChange('authRepDetails', e.target.files?.[0] || null)} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
                         {errors.authRepDetails && <p className="text-xs text-red-500 mt-1">{errors.authRepDetails}</p>}
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Required Agreement *</label>
-                        <input type="file" onChange={(e) => updateField('requiredAgreement', e.target.files?.[0]?.name || '')} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
+                        <input type="file" onChange={(e) => handleFileChange('requiredAgreement', e.target.files?.[0] || null)} className="text-xs text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 dark:file:bg-teal-950/50 file:text-teal-700 dark:file:text-teal-300" />
                         {errors.requiredAgreement && <p className="text-xs text-red-500 mt-1">{errors.requiredAgreement}</p>}
                       </div>
                     </div>

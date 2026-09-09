@@ -14,7 +14,7 @@ export function ClientNav({ initialUser }: { initialUser: any }) {
   const { logout, user: authUser } = useAuth()
 
   const user = authUser || initialUser
-  const dashboardUrl = user?.role === 'ADMIN' ? '/admin' : user?.role === 'DONOR' ? '/donor' : '/recipient'
+  const dashboardUrl = '/dashboard'
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -24,10 +24,9 @@ export function ClientNav({ initialUser }: { initialUser: any }) {
   ]
 
   return (
-    <header className="fixed top-4 inset-x-0 z-50 px-4 sm:px-6 lg:px-8 pointer-events-none">
-      <div className="max-w-7xl mx-auto pointer-events-auto">
-        <nav className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border border-gray-200/80 dark:border-gray-800/80 rounded-full px-4 sm:px-6 py-3 shadow-xl shadow-teal-900/5 dark:shadow-black/20 transition-all duration-300">
-          <div className="flex justify-between items-center">
+    <header className="sticky top-0 z-50 w-full pointer-events-auto">
+      <nav className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-b border-gray-200/80 dark:border-gray-800/80 px-4 sm:px-6 lg:px-8 py-3 shadow-sm shadow-teal-900/5 dark:shadow-black/20 transition-all duration-300">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
             {/* Brand Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
               <div className="w-9 h-9 bg-gradient-to-tr from-teal-600 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-teal-600/20 group-hover:scale-105 transition-transform">
@@ -72,8 +71,6 @@ export function ClientNav({ initialUser }: { initialUser: any }) {
 
             {/* Desktop Right User Controls */}
             <div className="hidden md:flex items-center gap-3">
-              <ThemeToggle />
-
               {user ? (
                 <div className="flex items-center gap-2 pl-2 border-l border-gray-200 dark:border-gray-800">
                   <Link
@@ -114,7 +111,6 @@ export function ClientNav({ initialUser }: { initialUser: any }) {
 
             {/* Mobile Menu Button */}
             <div className="flex items-center gap-2 md:hidden">
-              <ThemeToggle />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="p-2 text-gray-700 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -123,9 +119,8 @@ export function ClientNav({ initialUser }: { initialUser: any }) {
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
             </div>
-          </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
 
       {/* Mobile Drawer Menu */}
       <AnimatePresence>

@@ -111,7 +111,12 @@ export async function requireAuth(allowedRoles?: UserRole[]) {
 }
 
 export async function requireApprovedOrg() {
-  const session = await requireAuth(['DONOR', 'RECIPIENT'])
+  const session = await requireAuth(['DONOR', 'RECIPIENT', 'ADMIN'])
+  
+  // Admins bypass organization status checks since they oversee everything
+  if (session.user.role === 'ADMIN') {
+    return session
+  }
   
   if (!session.organization || session.organization.status !== 'APPROVED') {
     throw new Error('ORGANIZATION_NOT_APPROVED')

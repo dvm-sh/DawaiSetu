@@ -77,10 +77,9 @@ export function FloatingQuickAction() {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-gradient-to-tr from-teal-600 to-emerald-500 text-white rounded-full flex items-center justify-center shadow-xl shadow-teal-600/30 hover:scale-105 active:scale-95 transition-all cursor-pointer border border-white/20"
-        title="Quick Support & Actions"
+        className="w-14 h-14 bg-teal-500 hover:bg-teal-600 text-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_25px_rgba(20,184,166,0.5)] transition-all z-50 relative"
       >
-        {isOpen ? <X className="h-6 w-6" /> : <Sparkles className="h-6 w-6" />}
+        {isOpen ? <X className="h-6 w-6" /> : <Headset className="h-6 w-6" />}
       </button>
     </div>
   )

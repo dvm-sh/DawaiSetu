@@ -4,6 +4,7 @@ import { requireAuth } from '@/lib/auth'
 import { successResponse, errorResponse, handleApiError } from '@/lib/api-response'
 import { createAuditLog } from '@/lib/audit'
 import { createNotification } from '@/lib/notifications'
+import { sendEmail, emailTemplates } from '@/lib/email'
 
 export async function GET(request: NextRequest) {
   try {
@@ -75,6 +76,13 @@ export async function PUT(request: NextRequest) {
         entityId: organizationId,
         metadata: { organizationName: org.name },
       })
+      
+      // Fire and forget email
+      sendEmail({
+        to: org.user.email,
+        subject: 'DawaiSetu Accreditation Approved',
+        html: emailTemplates.organizationApproved(org.name),
+      })
     } else if (adminAction === 'reject') {
       if (!reason) return errorResponse('Rejection reason is required')
 
@@ -99,6 +107,12 @@ export async function PUT(request: NextRequest) {
         entityId: organizationId,
         metadata: { organizationName: org.name, reason },
       })
+      
+      sendEmail({
+        to: org.user.email,
+        subject: 'DawaiSetu Accreditation Update',
+        html: emailTemplates.organizationRejected(org.name, reason),
+      })
     } else if (adminAction === 'suspend') {
       await prisma.organization.update({
         where: { id: organizationId },
@@ -111,6 +125,31 @@ export async function PUT(request: NextRequest) {
         entityType: 'Organization',
         entityId: organizationId,
         metadata: { organizationName: org.name },
+      })
+      
+      sendEmail({
+        to: org.user.email,
+        subject: 'DawaiSetu Account Suspended',
+        html: emailTemplates.organizationSuspended(org.name),
+      })
+    } else if (adminAction === 'unsuspend') {
+      await prisma.organization.update({
+        where: { id: organizationId },
+        data: { status: 'APPROVED' },
+      })
+
+      await createAuditLog({
+        actorId: session.user.id,
+        action: 'ORGANIZATION_UNSUSPENDED',
+        entityType: 'Organization',
+        entityId: organizationId,
+        metadata: { organizationName: org.name },
+      })
+      
+      sendEmail({
+        to: org.user.email,
+        subject: 'DawaiSetu Account Restored',
+        html: emailTemplates.organizationUnSuspended(org.name),
       })
     }
 
