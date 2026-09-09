@@ -85,9 +85,7 @@ export default function ContactPage() {
           <span>Back to Home</span>
         </Link>
         <div className="flex items-center gap-3">
-          <span className="hidden sm:inline-block text-xs font-mono px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
-            Active Response Center
-          </span>
+
           <ThemeToggle />
         </div>
       </header>

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageSquare, Phone, HeartHandshake, ShieldCheck, X, Sparkles, HelpCircle } from 'lucide-react'
+import { MessageSquare, Phone, HeartHandshake, ShieldCheck, X, Sparkles, HelpCircle, Headset } from 'lucide-react'
 
 export function FloatingQuickAction() {
   const [isOpen, setIsOpen] = useState(false)
