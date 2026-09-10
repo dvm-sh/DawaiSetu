@@ -67,10 +67,3 @@ DawaiSetu operates with three primary user roles, ensuring a secure and regulate
    npm run dev
    ```
 6. Visit `http://localhost:3000` to access the platform.
-
-## 🎤 Presentation Talking Points
-If presenting this project, make sure to highlight:
-1. **The Core Problem:** Billions of dollars worth of viable medicines are destroyed annually while millions cannot afford basic healthcare.
-2. **The Security:** Emphasize that this isn't just a marketplace; it's a *regulated health exchange*. Point out the rigorous document verification and Admin dashboard.
-3. **The User Experience:** Show off the modern Glassmorphic design, smooth Framer Motion animations, and instant "Smart Matching" notifications.
-4. **The Tech Elegance:** Mention the use of Next.js App Router and Prisma to create a lightning-fast, full-stack application in a single codebase.
